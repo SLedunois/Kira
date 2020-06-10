@@ -1,5 +1,6 @@
-package com.kyra.Kyra;
+package com.kyra;
 
+import com.kyra.auth.AuthVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -12,11 +13,11 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(VertxExtension.class)
-public class TestMainVerticle {
+public class TestAuthVerticle {
 
   @BeforeEach
   void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
-    vertx.deployVerticle(new MainVerticle(), testContext.succeeding(id -> testContext.completeNow()));
+    vertx.deployVerticle(new AuthVerticle(), testContext.succeeding(id -> testContext.completeNow()));
   }
 
   @Test

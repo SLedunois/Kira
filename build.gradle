@@ -17,10 +17,10 @@ ext {
 }
 
 application {
-  mainClassName = 'io.vertx.core.Launcher'
+  mainClassName = 'com.kyra.KyraLauncher'
 }
 
-def mainVerticleName = 'com.kyra.Kyra.MainVerticle'
+def mainVerticleName = 'com.kyra.MainVerticle'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
@@ -29,6 +29,7 @@ dependencies {
   implementation "io.vertx:vertx-pg-client:$vertxVersion"
   implementation "io.vertx:vertx-service-discovery:$vertxVersion"
   implementation "io.vertx:vertx-redis-client:$vertxVersion"
+  implementation "io.vertx:vertx-hazelcast:$vertxVersion"
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
@@ -57,5 +58,11 @@ test {
 }
 
 run {
-  args = ['run', mainVerticleName, "--redeploy=$watchForChange", "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+  args = ["run",
+          mainVerticleName,
+          "--redeploy=$watchForChange",
+          "--launcher-class=$mainClassName",
+          "--on-redeploy=$doOnChange",
+          "--java-opts",
+          "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"]
 }

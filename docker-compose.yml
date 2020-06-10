@@ -1,0 +1,29 @@
+gradle:
+  image: gradle:alpine
+  working_dir: /home/gradle/project
+  command: "gradle clean run"
+  volumes:
+    - ./:/home/gradle/project
+    - ~/.m2:/home/gradle/.m2
+    - ~/.gradle:/home/gradle/.gradle
+  ports:
+    - "3000:3000"
+    - "3001:3001"
+    - "8000:8000"
+  links:
+    - postgres
+    - redis
+postgres:
+  image: postgres:9.6
+  environment:
+    POSTGRES_USER: kyra
+    POSTGRES_PASSWORD: kyra_1234
+    POSTGRES_DB: kyra
+  volumes:
+    - ./pg_data:/var/lib/postgresql/data
+  ports:
+    - "5432:5432"
+redis:
+  image: redis:5.0
+  ports:
+    - "6379:6379"
