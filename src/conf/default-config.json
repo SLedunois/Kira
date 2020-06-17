@@ -1,0 +1,21 @@
+{
+  "db": {
+    "redis": "redis://redis:6379",
+    "pg": {
+      "host": "postgres",
+      "port": 5432,
+      "db": "kyra",
+      "username": "kyra",
+      "password": "kyra_1234"
+    }
+  },
+  "com.kyra.auth.PortalVerticle": {
+    "port": 3000
+  },
+  "com.kyra.auth.AuthVerticle": {
+    "port": 3001
+  },
+  "com.kyra.project.ProjectVerticle": {
+    "port": 3002
+  }
+}

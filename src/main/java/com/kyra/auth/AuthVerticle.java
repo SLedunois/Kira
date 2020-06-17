@@ -1,18 +1,17 @@
 package com.kyra.auth;
 
+import com.kyra.auth.controller.AuthController;
 import com.kyra.common.verticle.ApiVerticle;
 import io.vertx.core.Promise;
 
 public class AuthVerticle extends ApiVerticle {
-
-  String NAME = "Authentication";
-  int PORT = 3000;
-
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
     super.start();
-    launchHttpServer(NAME, PORT, ar -> {
-      log.info(String.format("%s service successfully starts", NAME));
+    launchHttpServer(AuthVerticle.class.getName(), config().getInteger("port", 3001), ar -> {
+      AuthController authController = new AuthController(vertx, router, sessionStore);
+      authController.initRouter();
+      log.info(String.format("%s service successfully starts", AuthVerticle.class.getName()));
       startPromise.complete();
     });
   }

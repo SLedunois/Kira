@@ -29,7 +29,7 @@ dependencies {
   implementation "io.vertx:vertx-pg-client:$vertxVersion"
   implementation "io.vertx:vertx-service-discovery:$vertxVersion"
   implementation "io.vertx:vertx-redis-client:$vertxVersion"
-  implementation "io.vertx:vertx-hazelcast:$vertxVersion"
+  implementation "io.vertx:vertx-web-templ-handlebars:$vertxVersion"
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
@@ -64,5 +64,6 @@ run {
           "--launcher-class=$mainClassName",
           "--on-redeploy=$doOnChange",
           "--java-opts",
-          "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000"]
+          "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000",
+          "-Dvertx.disableFileCaching=true"]
 }
