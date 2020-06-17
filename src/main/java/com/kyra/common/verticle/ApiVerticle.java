@@ -1,5 +1,6 @@
 package com.kyra.common.verticle;
 
+import com.kyra.common.session.RedisSessionStore;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -8,23 +9,30 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.LoggerHandler;
+import io.vertx.ext.web.sstore.SessionStore;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
 import io.vertx.servicediscovery.types.EventBusService;
 
 public class ApiVerticle extends AbstractVerticle {
-  protected Logger log = LoggerFactory.getLogger(ApiVerticle.class);
   protected ServiceDiscovery discovery;
+  protected String ENDPOINT;
+  protected Logger log = LoggerFactory.getLogger(ApiVerticle.class);
   protected Router router;
+  protected SessionStore sessionStore;
 
   @Override
   public void start() throws Exception {
     super.start();
     discovery = ServiceDiscovery.create(vertx);
+    ENDPOINT = config().getString("endpoint", "/");
+    sessionStore = new RedisSessionStore();
   }
 
   public void launchHttpServer(String name, int port, Handler<AsyncResult<Void>> handler) {
     router = Router.router(vertx);
+    router.route().handler(LoggerHandler.create());
     router.route().handler(BodyHandler.create());
     vertx.createHttpServer()
       .requestHandler(router)
