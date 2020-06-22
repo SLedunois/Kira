@@ -15,4 +15,12 @@ public interface AuthService {
    * @param handler   function handler returning data
    */
   void register(String email, String firstName, String lastName, String password, Handler<AsyncResult<JsonObject>> handler);
+
+  /**
+   * Find user based on given email. Used in sign up sequence to check if email address already exists in the database
+   *
+   * @param email   user email
+   * @param handler function handler returning data
+   */
+  void findUser(String email, Handler<AsyncResult<JsonObject>> handler);
 }

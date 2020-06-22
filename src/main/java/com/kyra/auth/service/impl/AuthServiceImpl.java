@@ -16,4 +16,10 @@ public class AuthServiceImpl implements AuthService {
     Tuple params = Tuple.of(email, firstName, lastName, password);
     Pg.getInstance().preparedQuery(query, params, PgResult.uniqueJsonResult(handler));
   }
+
+  @Override
+  public void findUser(String email, Handler<AsyncResult<JsonObject>> handler) {
+    String query = "SELECT email FROM auth.user WHERE email = $1";
+    Pg.getInstance().preparedQuery(query, Tuple.of(email), PgResult.uniqueJsonResult(handler));
+  }
 }

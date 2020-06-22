@@ -72,6 +72,14 @@ body {
   margin-top: 1.5rem;
 }
 
+.auth-form .form-input .error-message {
+  padding: 0.5rem 0;
+  color: #FB6666;
+  background: rgba(251, 102, 102, 0.25);
+  border-radius: 0.25rem;
+  text-align: center;
+}
+
 .auth-form .logo {
   text-align: center;
   margin-bottom: 2rem;

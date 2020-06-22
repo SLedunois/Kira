@@ -2,6 +2,7 @@ package com.kyra.auth.handler;
 
 import com.kyra.auth.bean.RedisSession;
 import com.kyra.auth.constant.AuthCookie;
+import com.kyra.auth.controller.AuthController;
 import com.kyra.auth.router.Route;
 import io.vertx.core.MultiMap;
 import io.vertx.core.http.Cookie;
@@ -98,8 +99,7 @@ public class AuthFormLoginHandler implements FormLoginHandler {
             }
           });
         } else {
-          //TODO Redirect to another page with 403 state
-          rc.fail(403);  // Failed login
+          AuthController.rerouteToSignIn(rc, "Invalid email or password");
         }
       });
     }

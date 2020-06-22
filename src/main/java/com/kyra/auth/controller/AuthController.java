@@ -11,6 +11,7 @@ import com.kyra.common.utils.Render;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.Cookie;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -46,10 +47,27 @@ public class AuthController {
     router.get(Route.STATIC.path()).handler(StaticHandler.create("static"));
     router.getWithRegex(Route.HANDLEBARS_TEMPLATES.path()).handler(TemplateHandler.create(templateEngine));
     router.get(Route.SIGN_UP.path()).handler(this::signUp);
-    router.post(Route.SIGN_UP.path()).handler(this::registerRequestValidation).handler(this::register);
+    router.post(Route.SIGN_UP.path()).handler(this::registerRequestValidation).handler(this::userUniquenessCheck).handler(this::register);
     router.get(Route.SIGN_IN.path()).handler(this::sessionCheck).handler(this::signIn);
     router.post(Route.SIGN_IN.path()).handler(formLoginHandler);
     router.get(Route.SIGN_OUT.path()).handler(this::signOut);
+  }
+
+  private void userUniquenessCheck(RoutingContext rc) {
+    String email = rc.request().formAttributes().get("email");
+    authService.findUser(email, ar -> {
+      if (ar.failed()) {
+        rerouteToSignUp(rc, "An error occurred while registering your account");
+      } else {
+        if (ar.result() == null) rc.next();
+        else {
+          rc.put("email", email);
+          rc.put("first_name", rc.request().formAttributes().get("firstName"));
+          rc.put("last_name", rc.request().formAttributes().get("lastName"));
+          rerouteToSignUp(rc, "This email address is already registered");
+        }
+      }
+    });
   }
 
   /**
@@ -108,13 +126,30 @@ public class AuthController {
   }
 
   private void signIn(RoutingContext rc) {
-    rc.put("title", "Sign in");
-    rc.reroute("/auth/sign_in.hbs");
+    rerouteToSignIn(rc, null);
   }
 
+  public static void rerouteToSignIn(RoutingContext rc, String errorMessage) {
+    if (errorMessage != null && !"".equals(errorMessage.trim())) {
+      rc.put("error_message", errorMessage);
+    }
+
+    rc.put("title", "Sign in");
+    rc.reroute(HttpMethod.GET, "/auth/sign_in.hbs");
+  }
+
+
   private void signUp(RoutingContext rc) {
+    rerouteToSignUp(rc, null);
+  }
+
+  private void rerouteToSignUp(RoutingContext rc, String errorMessage) {
+    if (errorMessage != null && !"".equals(errorMessage.trim())) {
+      rc.put("error_message", errorMessage);
+    }
+
     rc.put("title", "Sign up");
-    rc.reroute("/auth/sign_up.hbs");
+    rc.reroute(HttpMethod.GET, "/auth/sign_up.hbs");
   }
 
   /**
