@@ -12,7 +12,6 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.LoggerHandler;
 import io.vertx.ext.web.sstore.SessionStore;
 import io.vertx.servicediscovery.Record;
 import io.vertx.servicediscovery.ServiceDiscovery;
@@ -37,7 +36,7 @@ public class ApiVerticle extends AbstractVerticle {
 
   public void launchHttpServer(String name, int port, Handler<AsyncResult<Void>> handler) {
     router = Router.router(vertx);
-    router.route().handler(LoggerHandler.create());
+//    router.route().handler(LoggerHandler.create());
     router.route().handler(BodyHandler.create());
     vertx.createHttpServer()
       .requestHandler(router)

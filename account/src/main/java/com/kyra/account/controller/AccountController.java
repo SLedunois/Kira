@@ -1,26 +1,32 @@
 package com.kyra.account.controller;
 
 import com.kyra.account.bean.Salt;
+import com.kyra.account.bean.UserImpl;
 import com.kyra.account.handler.AuthFormLoginHandler;
 import com.kyra.account.provider.PgAuthProvider;
 import com.kyra.account.router.Route;
 import com.kyra.account.service.AccountService;
 import com.kyra.account.service.impl.AccountServiceImpl;
 import com.kyra.common.session.AuthCookie;
+import com.kyra.common.session.RedisSession;
 import com.kyra.common.utils.Render;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.auth.AuthProvider;
+import io.vertx.ext.auth.User;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.Session;
 import io.vertx.ext.web.common.template.TemplateEngine;
 import io.vertx.ext.web.handler.FormLoginHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.TemplateHandler;
 import io.vertx.ext.web.sstore.SessionStore;
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
+
+import java.util.UUID;
 
 public class AccountController {
   private final AccountService accountService = new AccountServiceImpl();
@@ -42,7 +48,6 @@ public class AccountController {
     templateEngine = HandlebarsTemplateEngine.create(vertx);
 
     initRouter();
-    //TODO Create error handler and add it to index, login and register page
   }
 
   private void initRouter() {
@@ -126,7 +131,19 @@ public class AccountController {
     String password = body.get("password");
     accountService.register(email, firstName, lastName, new Salt(password).SHA1(), ar -> {
       if (ar.failed()) Render.internalServerError(rc);
-      else Render.created(rc, ar.result());
+      else {
+        User user = new UserImpl(ar.result());
+        String sessionId = UUID.randomUUID().toString();
+        Session session = new RedisSession(sessionId, user.principal().getMap());
+        sessionStore.put(session, sh -> {
+          if (sh.failed()) Render.internalServerError(rc);
+          else {
+            rc.setUser(user);
+            rc.addCookie(Cookie.cookie(AuthCookie.NAME, sessionId).setPath(Route.INDEX.path()));
+            Render.redirect(rc, Route.INDEX.path());
+          }
+        });
+      }
     });
   }
 
