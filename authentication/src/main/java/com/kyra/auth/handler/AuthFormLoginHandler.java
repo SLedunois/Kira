@@ -83,26 +83,30 @@ public class AuthFormLoginHandler implements FormLoginHandler {
       log.warn("No username or password provided in form - did you forget to include a BodyHandler?");
       rc.fail(400);
     } else {
-      JsonObject authInfo = new JsonObject().put("username", username).put("password", password);
-      authProvider.authenticate(authInfo, res -> {
-        if (res.succeeded()) {
-          User user = res.result();
-          rc.setUser(user);
-
-          Session session = new RedisSession(UUID.randomUUID().toString(), user.principal().getMap());
-          sessionStore.put(session, evt -> {
-            if (evt.failed()) {
-              doRedirect(req.response(), Route.SIGN_IN.path());
-            } else {
-              rc.response().addCookie(Cookie.cookie(AuthCookie.NAME, session.id()).setPath(Route.INDEX.path()));
-              doRedirect(req.response(), directLoggedInOKURL != null ? directLoggedInOKURL : Route.INDEX.path());
-            }
-          });
-        } else {
-          AuthController.rerouteToSignIn(rc, "Invalid email or password");
-        }
-      });
+      authenticate(rc, username, password);
     }
+  }
+
+  private void authenticate(RoutingContext rc, String username, String password) {
+    JsonObject authInfo = new JsonObject().put("username", username).put("password", password);
+    authProvider.authenticate(authInfo, res -> {
+      if (res.succeeded()) {
+        User user = res.result();
+        rc.setUser(user);
+
+        Session session = new RedisSession(UUID.randomUUID().toString(), user.principal().getMap());
+        sessionStore.put(session, evt -> {
+          if (evt.failed()) {
+            doRedirect(rc.request().response(), Route.SIGN_IN.path());
+          } else {
+            rc.response().addCookie(Cookie.cookie(AuthCookie.NAME, session.id()).setPath(Route.INDEX.path()));
+            doRedirect(rc.request().response(), directLoggedInOKURL != null ? directLoggedInOKURL : Route.INDEX.path());
+          }
+        });
+      } else {
+        AuthController.rerouteToSignIn(rc, "Invalid email or password");
+      }
+    });
   }
 
   private void doRedirect(HttpServerResponse response, String url) {

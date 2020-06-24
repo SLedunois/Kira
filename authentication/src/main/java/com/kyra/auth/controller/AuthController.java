@@ -100,19 +100,22 @@ public class AuthController {
    * @param rc Current routing context
    */
   private void registerRequestValidation(RoutingContext rc) {
-    MultiMap body = rc.request().formAttributes();
-    String firstName = body.get("firstName");
-    String lastName = body.get("lastName");
-    String email = body.get("email");
-    String password = body.get("password");
+    try {
+      MultiMap body = rc.request().formAttributes();
+      String firstName = body.get("firstName");
+      String lastName = body.get("lastName");
+      String email = body.get("email");
+      String password = body.get("password");
 
-    if (firstName == null || "".equals(firstName.trim()) || lastName == null || "".equals(lastName.trim())
-      || email == null && "".equals(email.trim()) || password == null || "".equals(password.trim())) {
+      if ("".equals(firstName.trim()) || "".equals(lastName.trim()) || "".equals(email.trim()) || "".equals(password.trim())) {
+        Render.badRequest(rc);
+        return;
+      }
+
+      rc.next();
+    } catch (NullPointerException e) {
       Render.badRequest(rc);
-      return;
     }
-
-    rc.next();
   }
 
   private void register(RoutingContext rc) {
@@ -132,12 +135,7 @@ public class AuthController {
   }
 
   public static void rerouteToSignIn(RoutingContext rc, String errorMessage) {
-    if (errorMessage != null && !"".equals(errorMessage.trim())) {
-      rc.put("error_message", errorMessage);
-    }
-
-    rc.put("title", "Sign in");
-    rc.reroute(HttpMethod.GET, "/auth/sign_in.hbs");
+    reroute(rc, HttpMethod.GET, "/auth/sign_in.hbs", "Sign in", errorMessage);
   }
 
 
@@ -146,12 +144,16 @@ public class AuthController {
   }
 
   private void rerouteToSignUp(RoutingContext rc, String errorMessage) {
+    reroute(rc, HttpMethod.GET, "/auth/sign_up.hbs", "Sign up", errorMessage);
+  }
+
+  private static void reroute(RoutingContext rc, HttpMethod method, String path, String title, String errorMessage) {
     if (errorMessage != null && !"".equals(errorMessage.trim())) {
       rc.put("error_message", errorMessage);
     }
 
-    rc.put("title", "Sign up");
-    rc.reroute(HttpMethod.GET, "/auth/sign_up.hbs");
+    rc.put("title", title);
+    rc.reroute(method, path);
   }
 
   /**
