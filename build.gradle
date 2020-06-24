@@ -4,6 +4,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
+def mainVerticle = project.properties['mainVerticle'] ?: "com.kyra.portal.PortalVerticle"
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
