@@ -1,7 +1,7 @@
 #/bin/bash
 
-microservices=("authentication" "portal")
-mainVerticles=("com.kyra.auth.AuthVerticle" "com.kyra.portal.PortalVerticle")
+microservices=("account" "portal")
+mainVerticles=("com.kyra.account.AccountVerticle" "com.kyra.portal.PortalVerticle")
 
 build() {
   echo "Building microservice: $1, mainVerticle: $2"
@@ -14,6 +14,7 @@ launch() {
 }
 
 launchAll() {
+  docker-compose down
   for ((idx=0; idx<${#microservices[@]}; ++idx))
   do
     build ${microservices[idx]} ${mainVerticles[idx]}

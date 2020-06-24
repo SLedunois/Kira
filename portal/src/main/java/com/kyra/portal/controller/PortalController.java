@@ -11,7 +11,7 @@ public class PortalController {
 
   public PortalController(Router router, SessionStore sessionStore) {
     this.router = router;
-    sessionHandler = new AuthSessionHandler().setSessionStore(sessionStore).setRedirectUri("/auth/sign-in");
+    sessionHandler = new AuthSessionHandler().setSessionStore(sessionStore).setRedirectUri("/account/sign-in");
     initRouter();
   }
 

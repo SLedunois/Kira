@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="120" src="https://raw.githubusercontent.com/SLedunois/Kyra/master/authentication/src/main/resources/static/img/logo.svg">
+    <img width="120" src="https://raw.githubusercontent.com/SLedunois/Kyra/master/account/src/main/resources/static/img/logo.svg">
 </p>
 
 

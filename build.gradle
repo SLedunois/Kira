@@ -41,7 +41,7 @@ subprojects {
     mavenCentral()
   }
 
-  project(":authentication") {
+  project(":account") {
     dependencies {
       compile project(':common')
       compile "io.vertx:vertx-web-templ-handlebars:$vertxVersion"

@@ -1,0 +1,58 @@
+{{#> layout }}
+  {{#*inline "content"}}
+    <form action="/account/sign-up" method="post" class="auth-form">
+      <div class="logo">
+        <img src="/account/static/img/logo.svg" alt="kyra.">
+      </div>
+      <nav>
+        <a href="/account/sign-in">
+          Sign in
+        </a>
+        <h1>
+          Sign up
+        </h1>
+      </nav>
+      {{#if error_message}}
+        <div class="form-input">
+          <div class="error-message">
+            {{error_message}}
+          </div>
+        </div>
+      {{/if}}
+      <div class="form-input">
+        <label for="email">
+          Email
+        </label>
+        <input type="email" name="email" id="email" value="{{email}}" required/>
+      </div>
+      <div class="form-input">
+        <label for="firstName">
+          First name
+        </label>
+        <input type="text" name="firstName" id="firstName" value="{{first_name}}" required/>
+      </div>
+      <div class="form-input">
+        <label for="lastName">
+          Last name
+        </label>
+        <input type="text" name="lastName" id="lastName" value="{{last_name}}" required/>
+      </div>
+      <div class="form-input">
+        <label for="password">
+          Password
+        </label>
+        <input type="password" name="password" id="password" required/>
+      </div>
+      <div class="form-input">
+        <label for="confirm-password">
+          Confirm password
+        </label>
+        <input type="password" id="confirm-password" required/>
+      </div>
+      <div class="form-input">
+        <input type="submit" value="sign up" id="submit" disabled/>
+      </div>
+    </form>
+    <script src="/account/static/js/password-check.js"></script>
+  {{/inline}}
+{{/layout}}
