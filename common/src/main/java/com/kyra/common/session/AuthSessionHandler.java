@@ -1,5 +1,6 @@
 package com.kyra.common.session;
 
+import com.kyra.common.bean.UserImpl;
 import com.kyra.common.utils.Render;
 import io.vertx.core.Handler;
 import io.vertx.core.http.Cookie;
@@ -28,6 +29,7 @@ public class AuthSessionHandler implements Handler<RoutingContext> {
         rc.removeCookie(AuthCookie.NAME, true);
         Render.redirect(rc, redirectUri);
       } else {
+        rc.setUser(new UserImpl(((RedisSession) ar.result()).toJSON()));
         rc.next();
       }
     });

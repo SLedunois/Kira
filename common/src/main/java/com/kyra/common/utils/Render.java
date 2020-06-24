@@ -1,5 +1,6 @@
 package com.kyra.common.utils;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
@@ -7,7 +8,7 @@ import io.vertx.ext.web.RoutingContext;
 public class Render {
   public static void redirect(RoutingContext rc, String uri) {
     rc.response()
-      .setStatusCode(302)
+      .setStatusCode(HttpResponseStatus.FOUND.code())
       .putHeader("Location", uri)
       .end();
   }
@@ -25,19 +26,27 @@ public class Render {
   }
 
   public static void created(RoutingContext rc, JsonArray values) {
-    renderJson(rc, 201, values.encode());
+    renderJson(rc, HttpResponseStatus.CREATED.code(), values.encode());
   }
 
   public static void created(RoutingContext rc, JsonObject value) {
-    renderJson(rc, 201, value.encode());
+    renderJson(rc, HttpResponseStatus.CREATED.code(), value.encode());
+  }
+
+  public static void ok(RoutingContext rc, JsonObject object) {
+    renderJson(rc, HttpResponseStatus.OK.code(), object.encode());
+  }
+
+  public static void ok(RoutingContext rc, JsonArray array) {
+    renderJson(rc, HttpResponseStatus.OK.code(), array.encode());
   }
 
   public static void unauthorized(RoutingContext rc) {
-    rc.response().setStatusCode(401).end();
+    rc.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end();
   }
 
   public static void internalServerError(RoutingContext rc) {
-    rc.response().setStatusCode(500).end();
+    rc.response().setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).end();
   }
 
 }

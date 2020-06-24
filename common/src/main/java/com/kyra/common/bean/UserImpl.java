@@ -1,6 +1,5 @@
-package com.kyra.account.bean;
+package com.kyra.common.bean;
 
-import com.kyra.account.form.Field;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -13,9 +12,9 @@ public class UserImpl implements User {
   private String lastName;
 
   public UserImpl(JsonObject object) {
-    this.email = object.getString("email", "");
-    this.firstName = object.getString("first_name", "");
-    this.lastName = object.getString("last_name", "");
+    this.email = object.getString(Field.email.name(), "");
+    this.firstName = object.getString(Field.firstName.name(), "");
+    this.lastName = object.getString(Field.lastName.name(), "");
   }
 
   @Override

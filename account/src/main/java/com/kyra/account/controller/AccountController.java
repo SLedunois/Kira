@@ -1,13 +1,15 @@
 package com.kyra.account.controller;
 
 import com.kyra.account.bean.Salt;
-import com.kyra.account.bean.UserImpl;
 import com.kyra.account.handler.AuthFormLoginHandler;
 import com.kyra.account.provider.PgAuthProvider;
 import com.kyra.account.router.Route;
 import com.kyra.account.service.AccountService;
 import com.kyra.account.service.impl.AccountServiceImpl;
+import com.kyra.common.bean.Field;
+import com.kyra.common.bean.UserImpl;
 import com.kyra.common.session.AuthCookie;
+import com.kyra.common.session.AuthSessionHandler;
 import com.kyra.common.session.RedisSession;
 import com.kyra.common.utils.Render;
 import io.vertx.core.MultiMap;
@@ -32,6 +34,7 @@ public class AccountController {
   private final AccountService accountService = new AccountServiceImpl();
   private final FormLoginHandler formLoginHandler;
   private final Router router;
+  private final AuthSessionHandler sessionHandler;
   private final SessionStore sessionStore;
   private final TemplateEngine templateEngine;
 
@@ -45,6 +48,7 @@ public class AccountController {
       .setPasswordParam("password")
       .setDirectLoggedInOKURL(Route.INDEX.path());
     this.router = router;
+    sessionHandler = new AuthSessionHandler().setSessionStore(sessionStore);
     templateEngine = HandlebarsTemplateEngine.create(vertx);
 
     initRouter();
@@ -58,19 +62,24 @@ public class AccountController {
     router.get(Route.SIGN_IN.path()).handler(this::sessionCheck).handler(this::signIn);
     router.post(Route.SIGN_IN.path()).handler(formLoginHandler);
     router.get(Route.SIGN_OUT.path()).handler(this::signOut);
+    router.get(Route.USER.path()).handler(sessionHandler).handler(this::userInfo);
+  }
+
+  private void userInfo(RoutingContext rc) {
+    Render.ok(rc, rc.user().principal());
   }
 
   private void userUniquenessCheck(RoutingContext rc) {
-    String email = rc.request().formAttributes().get("email");
+    String email = rc.request().formAttributes().get(Field.email.name());
     accountService.findUser(email, ar -> {
       if (ar.failed()) {
         rerouteToSignUp(rc, "An error occurred while registering your account");
       } else {
         if (ar.result() == null) rc.next();
         else {
-          rc.put("email", email);
-          rc.put("first_name", rc.request().formAttributes().get("firstName"));
-          rc.put("last_name", rc.request().formAttributes().get("lastName"));
+          rc.put(Field.email.name(), email);
+          rc.put(Field.firstName.name(), rc.request().formAttributes().get(Field.firstName.name()));
+          rc.put(Field.lastName.name(), rc.request().formAttributes().get(Field.lastName.name()));
           rerouteToSignUp(rc, "This email address is already registered");
         }
       }
@@ -107,10 +116,10 @@ public class AccountController {
   private void registerRequestValidation(RoutingContext rc) {
     try {
       MultiMap body = rc.request().formAttributes();
-      String firstName = body.get("firstName");
-      String lastName = body.get("lastName");
-      String email = body.get("email");
-      String password = body.get("password");
+      String firstName = body.get(Field.firstName.name());
+      String lastName = body.get(Field.lastName.name());
+      String email = body.get(Field.email.name());
+      String password = body.get(Field.password.name());
 
       if ("".equals(firstName.trim()) || "".equals(lastName.trim()) || "".equals(email.trim()) || "".equals(password.trim())) {
         Render.badRequest(rc);
@@ -125,10 +134,10 @@ public class AccountController {
 
   private void register(RoutingContext rc) {
     MultiMap body = rc.request().formAttributes();
-    String firstName = body.get("firstName");
-    String lastName = body.get("lastName");
-    String email = body.get("email");
-    String password = body.get("password");
+    String firstName = body.get(Field.firstName.name());
+    String lastName = body.get(Field.lastName.name());
+    String email = body.get(Field.email.name());
+    String password = body.get(Field.password.name());
     accountService.register(email, firstName, lastName, new Salt(password).SHA1(), ar -> {
       if (ar.failed()) Render.internalServerError(rc);
       else {

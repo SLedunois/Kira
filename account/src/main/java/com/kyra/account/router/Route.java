@@ -6,7 +6,8 @@ public enum Route {
   SIGN_IN("/account/sign-in"),
   SIGN_OUT("/account/sign-out"),
   SIGN_UP("/account/sign-up"),
-  STATIC("/account/static/*");
+  STATIC("/account/static/*"),
+  USER("/account/user");
 
   private final String path;
 

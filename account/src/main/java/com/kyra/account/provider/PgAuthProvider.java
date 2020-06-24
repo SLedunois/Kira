@@ -1,7 +1,7 @@
 package com.kyra.account.provider;
 
 import com.kyra.account.bean.Salt;
-import com.kyra.account.bean.UserImpl;
+import com.kyra.common.bean.UserImpl;
 import com.kyra.common.pg.Pg;
 import com.kyra.common.pg.PgResult;
 import io.vertx.core.AsyncResult;

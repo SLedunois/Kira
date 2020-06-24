@@ -1,4 +1,4 @@
-package com.kyra.account.form;
+package com.kyra.common.bean;
 
 public enum Field {
   email,
