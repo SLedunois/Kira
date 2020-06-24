@@ -9,7 +9,7 @@ authentication:
   container_name: authentication
   image: openjdk:8
   working_dir: /usr/src
-  command: java -jar /usr/src/authentication-fat.jar -conf /usr/src/conf.json
+  command: java -jar /usr/src/authentication-fat.jar -conf /usr/src/authentication.json
   environment:
     - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n\""
   ports:
@@ -17,7 +17,7 @@ authentication:
     - "8001:8001"
   volumes:
     - "./authentication/build/libs/authentication-fat.jar:/usr/src/authentication-fat.jar"
-    - "./authentication/conf/conf.json:/usr/src/conf.json"
+    - "./conf/authentication.json:/usr/src/authentication.json"
   links:
     - postgres
     - redis
@@ -25,7 +25,7 @@ portal:
   container_name: portal
   image: openjdk:alpine
   working_dir: /usr/src
-  command: java -jar /usr/src/portal-fat.jar -conf /usr/src/conf.json
+  command: java -jar /usr/src/portal-fat.jar -conf /usr/src/portal.json
   environment:
     - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n\""
   ports:
@@ -33,7 +33,7 @@ portal:
     - "8000:8000"
   volumes:
     - "./portal/build/libs/portal-fat.jar:/usr/src/portal-fat.jar"
-    - "./portal/conf/conf.json:/usr/src/conf.json"
+    - "./conf/portal.json:/usr/src/portal.json"
   links:
     - postgres
     - redis
