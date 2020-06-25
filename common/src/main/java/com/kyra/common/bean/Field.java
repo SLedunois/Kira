@@ -2,7 +2,7 @@ package com.kyra.common.bean;
 
 public enum Field {
   email,
-  firstName,
-  lastName,
+  first_name,
+  last_name,
   password;
 }

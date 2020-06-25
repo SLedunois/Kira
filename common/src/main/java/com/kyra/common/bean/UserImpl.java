@@ -13,8 +13,8 @@ public class UserImpl implements User {
 
   public UserImpl(JsonObject object) {
     this.email = object.getString(Field.email.name(), "");
-    this.firstName = object.getString(Field.firstName.name(), "");
-    this.lastName = object.getString(Field.lastName.name(), "");
+    this.firstName = object.getString(Field.first_name.name(), "");
+    this.lastName = object.getString(Field.last_name.name(), "");
   }
 
   @Override
@@ -31,8 +31,8 @@ public class UserImpl implements User {
   public JsonObject principal() {
     return new JsonObject()
       .put(Field.email.name(), this.email)
-      .put(Field.firstName.name(), this.firstName)
-      .put(Field.lastName.name(), this.lastName);
+      .put(Field.first_name.name(), this.firstName)
+      .put(Field.last_name.name(), this.lastName);
   }
 
   @Override

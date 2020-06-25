@@ -78,8 +78,8 @@ public class AccountController {
         if (ar.result() == null) rc.next();
         else {
           rc.put(Field.email.name(), email);
-          rc.put(Field.firstName.name(), rc.request().formAttributes().get(Field.firstName.name()));
-          rc.put(Field.lastName.name(), rc.request().formAttributes().get(Field.lastName.name()));
+          rc.put(Field.first_name.name(), rc.request().formAttributes().get(Field.first_name.name()));
+          rc.put(Field.last_name.name(), rc.request().formAttributes().get(Field.last_name.name()));
           rerouteToSignUp(rc, "This email address is already registered");
         }
       }
@@ -116,8 +116,8 @@ public class AccountController {
   private void registerRequestValidation(RoutingContext rc) {
     try {
       MultiMap body = rc.request().formAttributes();
-      String firstName = body.get(Field.firstName.name());
-      String lastName = body.get(Field.lastName.name());
+      String firstName = body.get(Field.first_name.name());
+      String lastName = body.get(Field.last_name.name());
       String email = body.get(Field.email.name());
       String password = body.get(Field.password.name());
 
@@ -134,8 +134,8 @@ public class AccountController {
 
   private void register(RoutingContext rc) {
     MultiMap body = rc.request().formAttributes();
-    String firstName = body.get(Field.firstName.name());
-    String lastName = body.get(Field.lastName.name());
+    String firstName = body.get(Field.first_name.name());
+    String lastName = body.get(Field.last_name.name());
     String email = body.get(Field.email.name());
     String password = body.get(Field.password.name());
     accountService.register(email, firstName, lastName, new Salt(password).SHA1(), ar -> {

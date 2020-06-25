@@ -1,6 +1,7 @@
 package com.kyra.account.service.impl;
 
 import com.kyra.account.service.AccountService;
+import com.kyra.common.bean.Field;
 import com.kyra.common.pg.Pg;
 import com.kyra.common.pg.PgResult;
 import io.vertx.core.AsyncResult;
@@ -11,8 +12,8 @@ import io.vertx.sqlclient.Tuple;
 public class AccountServiceImpl implements AccountService {
   @Override
   public void register(String email, String firstName, String lastName, String password, Handler<AsyncResult<JsonObject>> handler) {
-    String query = "INSERT INTO account.user(email, \"firstName\", \"lastName\", password) " +
-      "VALUES ($1, $2, $3, $4) RETURNING email, \"firstName\", \"lastName\";";
+    String query = String.format("INSERT INTO account.user(email, %s, %s, password) " +
+      "VALUES ($1, $2, $3, $4) RETURNING email, %s, %s;", Field.first_name.name(), Field.last_name.name(), Field.first_name.name(), Field.last_name.name());
     Tuple params = Tuple.of(email, firstName, lastName, password);
     Pg.getInstance().preparedQuery(query, params, PgResult.uniqueJsonResult(handler));
   }
