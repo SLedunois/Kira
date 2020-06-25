@@ -27,7 +27,8 @@ public class AuthSessionHandler implements Handler<RoutingContext> {
       if (ar.failed()) {
         //Invalid cookie or expired cookie
         rc.removeCookie(AuthCookie.NAME, true);
-        Render.redirect(rc, redirectUri);
+        if (this.redirectUri != null) Render.redirect(rc, redirectUri);
+        else Render.unauthorized(rc);
       } else {
         rc.setUser(new UserImpl(((RedisSession) ar.result()).toJSON()));
         rc.next();
