@@ -7,7 +7,7 @@ import io.vertx.core.Promise;
 public class PortalVerticle extends ApiVerticle {
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-    super.start();
+    super.start(PortalVerticle.class.getName());
     launchHttpServer(PortalVerticle.class.getName(), config().getInteger("port", 3000), ar -> {
       new PortalController(router, sessionStore);
       log.info(String.format("%s service successfully starts", PortalVerticle.class.getName()));

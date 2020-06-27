@@ -1,12 +1,12 @@
 package com.kyra.common.pg;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Pg {
   private PgPool client;
@@ -30,6 +30,22 @@ public class Pg {
     return PgHolder.instance;
   }
 
+  public void query(String query, Handler<AsyncResult<RowSet<Row>>> handler) {
+    client.getConnection(ar -> {
+      if (ar.failed()) {
+        handler.handle(Future.failedFuture(ar.cause()));
+        return;
+      }
+
+      SqlConnection connection = ar.result();
+      connection.query(query)
+        .execute(q -> {
+          handler.handle(q);
+          connection.close();
+        });
+    });
+  }
+
   public void preparedQuery(String sql, Tuple arguments, Handler<AsyncResult<RowSet<Row>>> handler) {
     client.getConnection(ar -> {
       if (ar.succeeded()) {
@@ -49,4 +65,38 @@ public class Pg {
       }
     });
   }
+
+  public void transaction(List<Statement> queries, Handler<AsyncResult<Void>> handler) {
+    client.getConnection(ar -> {
+      if (ar.failed()) {
+        handler.handle(Future.failedFuture(ar.cause()));
+        return;
+      }
+
+      List<Future> futures = new ArrayList<>();
+      SqlConnection connection = ar.result();
+      Transaction transaction = connection.begin();
+
+      for (Statement query : queries) {
+        Future future = Promise.promise().future();
+        futures.add(future);
+        if (query.prepared()) connection.preparedQuery(query.query()).execute(query.params(), future);
+        else connection.query(query.query()).execute(future);
+      }
+
+      CompositeFuture.all(futures)
+        .onSuccess(qs -> {
+          transaction.commit(tx -> {
+            if (tx.failed()) handler.handle(Future.failedFuture(tx.cause()));
+            else handler.handle(Future.succeededFuture(tx.result()));
+            connection.close();
+          });
+        })
+        .onFailure(fail -> {
+          handler.handle(Future.failedFuture(fail));
+          connection.close();
+        });
+    });
+  }
+
 }

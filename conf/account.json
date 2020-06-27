@@ -6,7 +6,8 @@
       "port": 5432,
       "db": "kyra",
       "username": "kyra",
-      "password": "kyra_1234"
+      "password": "kyra_1234",
+      "schema": "account"
     }
   }
 }
