@@ -13,6 +13,10 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+    alias: {
+      "@assets": path.resolve(__dirname, 'portal', 'src', 'main', 'resources', 'assets'),
+      "@ui": path.resolve(__dirname, 'portal', 'src', 'main', 'resources', 'components')
+    }
   },
   module: {
     rules: [
@@ -32,6 +36,13 @@ module.exports = {
           {loader: 'css-loader', options: {importLoaders: 1}},
           'postcss-loader'
         ]
+      },
+      {
+        loader: require.resolve('file-loader'),
+        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/, /\.css$/],
+        options: {
+          name: 'static/media/[name].[hash:8].[ext]',
+        }
       }
     ],
   },

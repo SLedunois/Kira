@@ -1,9 +1,14 @@
 import * as ReactDOM from "react-dom";
-import {App} from "./components/App";
-import * as React from "react";
+import {Provider} from "react-redux";
+import {App} from "./features/app/App";
 
+import * as React from "react";
 import './assets/tailwind.css';
 
+import store from './store';
+
 ReactDOM.render(
-  <App/>, document.getElementById("output")
+  <Provider store={store}>
+    <App/>
+  </Provider>, document.getElementById("kyra")
 );

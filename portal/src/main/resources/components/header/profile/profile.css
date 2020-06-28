@@ -1,0 +1,3 @@
+.profile-options ul li:hover svg {
+  fill: theme('colors.primary.100');
+}
