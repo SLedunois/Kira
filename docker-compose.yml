@@ -46,6 +46,22 @@ portal:
   links:
     - postgres
     - redis
+project:
+  container_name: project
+  image: openjdk:alpine
+  working_dir: /usr/src
+  command: java -jar /usr/src/project-fat.jar -conf /usr/src/project.json
+  environment:
+    - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n\""
+  ports:
+    - "3002:3002"
+    - "8002:8002"
+  volumes:
+    - "./project/build/libs/project-fat.jar:/usr/src/project-fat.jar"
+    - "./conf/project.json:/usr/src/project.json"
+  links:
+    - postgres
+    - redis
 postgres:
   container_name: postgres
   image: postgres:9.6
@@ -71,5 +87,6 @@ nginx:
     - front
     - account
     - portal
+    - project
   volumes:
     - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
