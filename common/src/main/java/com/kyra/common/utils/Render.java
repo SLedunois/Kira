@@ -49,4 +49,7 @@ public class Render {
     rc.response().setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).end();
   }
 
+  public static void noContent(RoutingContext rc) {
+    rc.response().setStatusCode(HttpResponseStatus.NO_CONTENT.code()).end();
+  }
 }

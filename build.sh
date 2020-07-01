@@ -1,11 +1,12 @@
 #/bin/bash
+set -e
 
 microservices=("account" "portal" "project")
 mainVerticles=("com.kyra.account.AccountVerticle" "com.kyra.portal.PortalVerticle", "com.kyra.project.ProjectVerticle")
 
 build() {
   echo "Building microservice: $1, mainVerticle: $2"
-  docker-compose run --rm gradle gradle :$1:clean :$1:assemble -PmainVerticle=$2
+  docker-compose run --rm gradle gradle :$1:clean :$1:shadowJar -PmainVerticle=$2
 }
 
 launch() {
@@ -35,9 +36,9 @@ develop() {
   idx=$(getMicroserviceIndex $1)
   microservice=${microservices[idx]}
   verticle=${mainVerticles[idx]}
-  docker stop $microservice
+  docker stop nginx $microservice
   build $microservice $verticle
-  docker-compose up $microservice
+  docker-compose up -d nginx && docker logs -f $microservice --since 0s
 }
 
 

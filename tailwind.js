@@ -238,7 +238,7 @@ module.exports = {
       disc: 'disc',
       decimal: 'decimal',
     },
-    margin: (theme, { negative }) => ({
+    margin: (theme, {negative}) => ({
       auto: 'auto',
       ...theme('spacing'),
       ...negative(theme('spacing')),
@@ -247,7 +247,7 @@ module.exports = {
       full: '100%',
       screen: '100vh',
     },
-    maxWidth: (theme, { breakpoints }) => ({
+    maxWidth: (theme, {breakpoints}) => ({
       none: 'none',
       xs: '20rem',
       sm: '24rem',
@@ -264,11 +264,20 @@ module.exports = {
     }),
     minHeight: {
       '0': '0',
+      content: 'calc(100vh - 4rem);',
       full: '100%',
       screen: '100vh',
     },
     minWidth: {
       '0': '0',
+      '2': '2rem',
+      '4': '4rem',
+      '6': '6rem',
+      '8': '8rem',
+      '10': '10rem',
+      'quarter': '25%',
+      'tier': '33%',
+      'half': '50%',
       full: '100%',
     },
     objectPosition: {
@@ -502,7 +511,7 @@ module.exports = {
       '90': '90deg',
       '180': '180deg',
     },
-    translate: (theme, { negative }) => ({
+    translate: (theme, {negative}) => ({
       ...theme('spacing'),
       ...negative(theme('spacing')),
       '-full': '-100%',
@@ -539,6 +548,7 @@ module.exports = {
       '100': '100ms',
       '150': '150ms',
       '200': '200ms',
+      '250': '250ms',
       '300': '300ms',
       '500': '500ms',
       '700': '700ms',

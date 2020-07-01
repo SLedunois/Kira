@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import {UserBadge} from '@ui/user-badge/UserBadge';
+import {UserBadge} from '@ui/UserBadge';
 import {Chevron, Logout} from '@ui/icons';
+import {initials} from "../../../utils";
 
 import './profile.css';
 
@@ -20,14 +21,12 @@ export const Profile = (props: IProfile) => {
     setOpened(!opened)
   }
 
-  function _initials() {
-    return `${firstName[0]}${lastName[0]}`
-  }
-
   return (
     <div className="h-full" onClick={_open}>
       <div className="flex items-center cursor-pointer h-full">
-        <UserBadge label={_initials()} color="primary"/>
+        <div className="ml-6 mr-4">
+          <UserBadge label={initials(firstName, lastName)} color="primary"/>
+        </div>
         <div className="mr-4 font-medium text-base">{firstName} {lastName}</div>
         <Chevron className="mr-6 fill-black w-3"/>
       </div>

@@ -16,6 +16,9 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.Router;
@@ -31,6 +34,7 @@ import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import java.util.UUID;
 
 public class AccountController {
+  private Logger log = LoggerFactory.getLogger(AccountController.class);
   private final AccountService accountService = new AccountServiceImpl();
   private final FormLoginHandler formLoginHandler;
   private final Router router;
@@ -63,6 +67,23 @@ public class AccountController {
     router.post(Route.SIGN_IN.path()).handler(formLoginHandler);
     router.get(Route.SIGN_OUT.path()).handler(this::signOut);
     router.get(Route.USER.path()).handler(sessionHandler).handler(this::userInfo);
+    router.get(Route.SEARCH.path()).handler(sessionHandler).handler(this::checkSearch).handler(this::search);
+  }
+
+  private void checkSearch(RoutingContext rc) {
+    if (!rc.request().params().contains("q")) {
+      Render.badRequest(rc);
+    } else rc.next();
+  }
+
+  private void search(RoutingContext rc) {
+    String q = rc.request().getParam("q");
+    accountService.search(q, ar -> {
+      if (ar.failed()) {
+        log.error(String.format("[%s] Failed to search for user: %s", AccountController.class, q), ar.cause());
+        Render.internalServerError(rc);
+      } else Render.ok(rc, new JsonArray(ar.result()));
+    });
   }
 
   private void userInfo(RoutingContext rc) {

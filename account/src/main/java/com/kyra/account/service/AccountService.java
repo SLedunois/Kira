@@ -4,6 +4,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 
+import java.util.List;
+
 public interface AccountService {
   /**
    * Register new user
@@ -23,4 +25,6 @@ public interface AccountService {
    * @param handler function handler returning data
    */
   void findUser(String email, Handler<AsyncResult<JsonObject>> handler);
+
+  void search(String query, Handler<AsyncResult<List<JsonObject>>> handler);
 }

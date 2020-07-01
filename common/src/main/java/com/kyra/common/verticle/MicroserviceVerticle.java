@@ -31,12 +31,11 @@ public class MicroserviceVerticle extends AbstractVerticle {
     String dbName = pgConfig.getString("db");
     String username = pgConfig.getString("username");
     String password = pgConfig.getString("password");
-    String schema = pgConfig.getString("schema");
+    String schema = pgConfig.getString("schema", "public");
     int poolSize = pgConfig.getInteger("pool_size", 5);
     Pg.getInstance().init(vertx, host, port, dbName, username, password, poolSize);
-    if (schema != null) new DB(vertx, microservice, schema).loadScripts();
-    else
-      log.error(String.format("[%s] unable to find schema name in microservice configuration. Skipping database initialization", microservice));
+    Pg.getInstance().setSchema(schema);
+    new DB(vertx, microservice, schema).loadScripts();
   }
 
   private void initRedis() {

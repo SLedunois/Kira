@@ -39,4 +39,8 @@ public class UserImpl implements User {
   public void setAuthProvider(AuthProvider authProvider) {
     throw new UnsupportedOperationException("Method not implemented");
   }
+
+  public String email() {
+    return this.email;
+  }
 }

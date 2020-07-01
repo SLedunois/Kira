@@ -26,27 +26,29 @@ dependencies {
   implementation "io.vertx:vertx-service-discovery:$vertxVersion"
   implementation "io.vertx:vertx-redis-client:$vertxVersion"
   implementation "io.vertx:vertx-web-templ-handlebars:$vertxVersion"
+  implementation "io.vertx:vertx-web-api-contract:$vertxVersion"
+  implementation "io.vertx:vertx-hazelcast:$vertxVersion"
+  implementation "io.vertx:vertx-service-proxy:$vertxVersion"
   testImplementation "io.vertx:vertx-junit5:$vertxVersion"
+  annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
   testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
   testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
 }
 
 
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'application'
-  apply plugin: 'com.github.johnrengelman.shadow'
-
   repositories {
     mavenCentral()
   }
 
   project(":account") {
-    apply plugin: 'java'
-
     dependencies {
+      apply plugin: 'java'
+
       compile project(':common')
       compile "io.vertx:vertx-web-templ-handlebars:$vertxVersion"
+      compileOnly "io.vertx:vertx-codegen:$vertxVersion"
+      annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
     }
   }
 
@@ -55,6 +57,8 @@ subprojects {
 
     dependencies {
       compile project(':common')
+      compileOnly "io.vertx:vertx-codegen:$vertxVersion"
+      annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
     }
   }
 
@@ -63,6 +67,9 @@ subprojects {
 
     dependencies {
       compile project(':common')
+      compile "io.vertx:vertx-web-api-contract:$vertxVersion"
+      compileOnly "io.vertx:vertx-codegen:$vertxVersion"
+      annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
     }
   }
 
@@ -74,11 +81,23 @@ subprojects {
       compile "io.vertx:vertx-pg-client:$vertxVersion"
       compile "io.vertx:vertx-service-discovery:$vertxVersion"
       compile "io.vertx:vertx-redis-client:$vertxVersion"
+      compile "io.vertx:vertx-web-api-contract:$vertxVersion"
+      compile "io.vertx:vertx-hazelcast:$vertxVersion"
+      compile "io.vertx:vertx-service-proxy:$vertxVersion"
+      compileOnly "io.vertx:vertx-codegen:$vertxVersion"
+      annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
+      annotationProcessor "io.vertx:vertx-service-proxy:$vertxVersion:processor"
     }
+
+
   }
 }
 
 allprojects {
+  apply plugin: 'java'
+  apply plugin: 'application'
+  apply plugin: 'com.github.johnrengelman.shadow'
+
   java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -97,6 +116,26 @@ allprojects {
             "--java-opts",
             "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000",
             "-Dvertx.disableFileCaching=true"]
+  }
+
+  task annotationProcessing(type: JavaCompile, group: 'build') { // codegen
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.compileOnly
+    destinationDir = project.file('src/main/generated')
+    options.annotationProcessorPath = configurations.annotationProcessor
+    options.compilerArgs = [
+      "-proc:only",
+      "-processor", "io.vertx.codegen.CodeGenProcessor",
+      "-Acodegen.output=${project.projectDir}/src/main"
+    ]
+  }
+
+  sourceSets {
+    main {
+      java {
+        srcDirs += 'src/main/generated'
+      }
+    }
   }
 
   shadowJar {

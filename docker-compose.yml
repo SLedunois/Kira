@@ -18,7 +18,7 @@ account:
   container_name: account
   image: openjdk:8
   working_dir: /usr/src
-  command: java -jar /usr/src/account-fat.jar -conf /usr/src/account.json
+  command: java -jar /usr/src/account-fat.jar -conf /usr/src/account.json -cluster
   environment:
     - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8001,server=y,suspend=n\""
   ports:
@@ -27,6 +27,7 @@ account:
   volumes:
     - "./account/build/libs/account-fat.jar:/usr/src/account-fat.jar"
     - "./conf/account.json:/usr/src/account.json"
+    - "./conf/default-cluster.xml:/usr/src/cluster.xml"
   links:
     - postgres
     - redis
@@ -34,7 +35,7 @@ portal:
   container_name: portal
   image: openjdk:alpine
   working_dir: /usr/src
-  command: java -jar /usr/src/portal-fat.jar -conf /usr/src/portal.json
+  command: java -jar /usr/src/portal-fat.jar -conf /usr/src/portal.json -cluster
   environment:
     - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n\""
   ports:
@@ -43,6 +44,7 @@ portal:
   volumes:
     - "./portal/build/libs/portal-fat.jar:/usr/src/portal-fat.jar"
     - "./conf/portal.json:/usr/src/portal.json"
+    - "./conf/default-cluster.xml:/usr/src/cluster.xml"
   links:
     - postgres
     - redis
@@ -50,7 +52,7 @@ project:
   container_name: project
   image: openjdk:alpine
   working_dir: /usr/src
-  command: java -jar /usr/src/project-fat.jar -conf /usr/src/project.json
+  command: java -jar /usr/src/project-fat.jar -conf /usr/src/project.json -cluster
   environment:
     - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n\""
   ports:
@@ -59,6 +61,7 @@ project:
   volumes:
     - "./project/build/libs/project-fat.jar:/usr/src/project-fat.jar"
     - "./conf/project.json:/usr/src/project.json"
+    - "./conf/default-cluster.xml:/usr/src/cluster.xml"
   links:
     - postgres
     - redis

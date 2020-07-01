@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import {Notification} from './notification/Notification'
-import {Profile} from "./profile/Profile";
+import {Notification} from './Notification'
+import {Profile} from "./Profile";
 
 import Logo from '@assets/img/logo.svg';
 
