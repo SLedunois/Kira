@@ -1,9 +1,22 @@
 import http from 'axios';
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
-export const initialState = {
+type AppState = {
+  loading: boolean
+  user: {
+    email: string
+    first_name: string
+    last_name: string
+  }
+}
+
+export const initialState: AppState = {
   loading: false,
-  user: {}
+  user: {
+    email: null,
+    first_name: null,
+    last_name: null
+  }
 }
 
 export const fetchUser = createAsyncThunk(
