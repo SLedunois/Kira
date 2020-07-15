@@ -1,31 +1,27 @@
 import React, {useEffect, useState} from "react";
-import http from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 
 import {Button} from "@ui/Button";
-import {Modal} from '@ui/Modal';
-import {Input} from '@ui/Form';
 import {Loader} from "@ui/Loader";
-import {SearchField} from "@ui/SearchField";
 import EmptyScreen from '@assets/img/onboarding/empty_projects.svg';
 
-import {SearchListItem} from "./components/SearchListItem";
-import {createProjects, fetchProjects} from './ProjectSlice';
+import {ProjectModal} from './components/Modal';
+import {createProjects, fetchProjects, updateProject} from './ProjectSlice';
 import {ProjectsList} from "./components/ProjectsList";
-import {Member} from "./types";
-import {SearchBadge} from "./components/SearchBadge";
-import {randomColor} from "../../utils";
+import {Project} from "./types";
+
+const EMPTY_PROJECT: Project = {
+  name: '',
+  members: []
+}
 
 export const Projects = () => {
   const dispatch = useDispatch();
   const {projects, loading} = useSelector((state: RootState) => state.projectReducer);
+  const [project, setProject] = useState(EMPTY_PROJECT);
   const [sort, setSort] = useState(1);
   const [displayModal, showModal] = useState(false);
-  const [projectName, setProjectName] = useState('');
-  const [memberName, setMemberName] = useState('');
-  const [members, setMembers] = useState([]);
-  const [projectMembers, setProjectMembers] = useState([]);
 
   useEffect(() => {
     dispatch(fetchProjects(sort));
@@ -33,14 +29,16 @@ export const Projects = () => {
 
   const resetCreationForm = () => {
     showModal(false);
-    setProjectName('');
-    setMemberName('');
-    setMembers([]);
-    setProjectMembers([]);
+    setProject(EMPTY_PROJECT);
   }
 
-  const modalValidation = async () => {
-    await dispatch(createProjects({name: projectName, members: projectMembers}));
+  const modalValidation = async (project: Project) => {
+    if (project.id) {
+      await dispatch(updateProject(project));
+    } else {
+      await dispatch(createProjects(project));
+    }
+
     dispatch(fetchProjects(sort))
     resetCreationForm();
   }
@@ -50,21 +48,9 @@ export const Projects = () => {
     dispatch(fetchProjects(sort))
   }
 
-  const searchForMembers = async (value: string) => {
-    try {
-      if (value.trim() === '') {
-        setMembers([]);
-        setMemberName('');
-        return;
-      }
-
-      const {data} = await http.get(`/account/search?q=${value}`);
-      (data as Member[]).map(member => member.color = randomColor());
-      setMembers(data);
-      setMemberName(value);
-    } catch (e) {
-      throw e;
-    }
+  const edit = (project: Project) => {
+    setProject(project);
+    showModal(true);
   }
 
   const nonEmptyProjects = (
@@ -78,7 +64,7 @@ export const Projects = () => {
         <div>
           <Button label={"Sort"} onClick={sortProjects} cancel={true}/>
         </div>
-        <ProjectsList projects={projects}/>
+        <ProjectsList projects={projects} edit={edit}/>
       </div>
     </div>
   );
@@ -105,44 +91,10 @@ export const Projects = () => {
     else return emptyProjects;
   }
 
-  const addProjectMember = (member: Member) => {
-    const found = projectMembers.find(el => el.email === member.email);
-    if (!found) {
-      setProjectMembers([...projectMembers, member]);
-      setMembers([]);
-      setMemberName('');
-    }
-  }
-
   return (
     <div className="px-16 min-h-content">
-      {
-        renderContent()
-      }
-      <Modal title="Add new project" active={displayModal} onClose={resetCreationForm}
-             onValidation={() => modalValidation()}>
-        <div className="mb-6">
-          <Input label={"Project name"} value={projectName} onChange={(event) => setProjectName(event.target.value)}/>
-        </div>
-        <div className="mb-4">
-          <SearchField label={"Invite members"} value={memberName} onChange={searchForMembers}>
-            {
-
-              members.map(member => <SearchListItem key={member.email} lastName={member.last_name}
-                                                    firstName={member.first_name}
-                                                    color={member.color}
-                                                    onClick={() => addProjectMember(member)}/>)
-            }
-          </SearchField>
-        </div>
-        <div className="flex flex-row">
-          {
-            projectMembers.map(member => <SearchBadge key={member.email} lastName={member.last_name}
-                                                      firstName={member.first_name}
-                                                      color={member.color} onRemove={() => alert('onRemove')}/>)
-          }
-        </div>
-      </Modal>
+      {renderContent()}
+      <ProjectModal project={project} show={displayModal} onClose={resetCreationForm} onValidation={modalValidation}/>
     </div>
   );
 }

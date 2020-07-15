@@ -13,7 +13,7 @@ type ISearchBadge = {
 }
 
 export const SearchBadge = ({firstName, lastName, color, onRemove}: ISearchBadge) => (
-  <div className="bg-white pr-1 py-1 inline-block flex flex-row items-center justify-center mr-2 rounded-lg">
+  <div className="bg-white pr-1 py-1 inline-block flex flex-row items-center justify-center mr-2 rounded-lg mb-2">
     <div className="ml-3 mr-2">
       <UserBadge size={"small"} color={color} label={initials(firstName, lastName)}/>
     </div>
@@ -21,7 +21,7 @@ export const SearchBadge = ({firstName, lastName, color, onRemove}: ISearchBadge
       {firstName} {lastName}
     </div>
     <div className="mx-2">
-      <Close className={"fill-black w-3"} onClick={onRemove}/>
+      <Close className={"fill-black w-3 cursor-pointer"} onClick={onRemove}/>
     </div>
   </div>
 )

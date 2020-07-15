@@ -275,6 +275,7 @@ module.exports = {
       '6': '6rem',
       '8': '8rem',
       '10': '10rem',
+      '12': '12rem',
       'quarter': '25%',
       'tier': '33%',
       'half': '50%',

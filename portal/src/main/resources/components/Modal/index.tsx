@@ -9,6 +9,7 @@ type IModal = {
   title: string
   onClose: any
   onValidation: any
+  validationLabel?: any
   children?: any
 }
 
@@ -39,7 +40,7 @@ const ModalFooter = ({onClose, onValidation, validationLabel}: IModalFooter) => 
   </div>
 );
 
-const ModalComponent = ({title, children, active, onClose, onValidation}: IModal) => {
+const ModalComponent = ({title, children, active, onClose, onValidation, validationLabel}: IModal) => {
   const onEsc = (evt: KeyboardEvent) => {
     let isEscape = (evt.key === "Escape" || evt.key === "Esc");
     if (isEscape) onClose();
@@ -62,7 +63,7 @@ const ModalComponent = ({title, children, active, onClose, onValidation}: IModal
             {...children}
           </div>
           <ModalFooter
-            validationLabel={"add"}
+            validationLabel={validationLabel || "add"}
             onValidation={onValidation}
             onClose={onClose}/>
         </div>
