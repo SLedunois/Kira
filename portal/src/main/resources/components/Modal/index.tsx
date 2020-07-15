@@ -51,7 +51,7 @@ const ModalComponent = ({title, children, active, onClose, onValidation, validat
   });
 
   return (
-    <div className={`transition duration-300 ease-in-out fixed w-full h-full top-0 left-0 flex items-center
+    <div className={`transition duration-300 ease-in-out fixed w-full h-full top-0 left-0 flex items-center z-50
     justify-center ${active ? 'opacity-1' : 'opacity-0 pointer-events-none'}`}>
       <div className="modal-overlay absolute w-full h-full bg-black opacity-50"
            onClick={onClose}>&nbsp;</div>

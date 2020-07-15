@@ -58,7 +58,7 @@ export const DotMenu = (props: any) => {
       {
         display &&
         <div
-          className={`absolute bg-white border border-grey-25 mt-2 rounded-lg shadow-xl min-w-10 overflow-hidden ${classes.join(' ')}`}
+          className={`absolute bg-white border border-grey-25 mt-2 rounded-lg shadow-xl min-w-10 overflow-hidden ${classes.join(' ')} z-1`}
           ref={dropdownRef}>
           {...props.children}
         </div>

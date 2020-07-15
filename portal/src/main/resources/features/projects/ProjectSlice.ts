@@ -24,7 +24,7 @@ export const fetchProjects = createAsyncThunk(
     data.forEach(initProject)
     return data;
   }
-)
+);
 
 export const createProjects = createAsyncThunk(
   'projects/create',
@@ -32,7 +32,7 @@ export const createProjects = createAsyncThunk(
     const {data} = await http.post('/api/v1/projects', project);
     return data;
   }
-)
+);
 
 export const updateProject = createAsyncThunk(
   'projects/update',
@@ -41,6 +41,14 @@ export const updateProject = createAsyncThunk(
     return data;
   }
 );
+
+export const deleteProject = createAsyncThunk(
+  'projects/delete',
+  async (project: Project) => {
+    const {data} = await http.delete(`/api/v1/projects/${project.id}`);
+    return data;
+  }
+)
 
 const projectSlice = createSlice({
   name: 'project',

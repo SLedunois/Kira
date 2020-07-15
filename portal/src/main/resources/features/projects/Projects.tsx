@@ -6,10 +6,11 @@ import {Button} from "@ui/Button";
 import {Loader} from "@ui/Loader";
 import EmptyScreen from '@assets/img/onboarding/empty_projects.svg';
 
-import {ProjectModal} from './components/Modal';
-import {createProjects, fetchProjects, updateProject} from './ProjectSlice';
+import {ProjectModal} from './components/ManagementModal';
+import {createProjects, deleteProject, fetchProjects, updateProject} from './ProjectSlice';
 import {ProjectsList} from "./components/ProjectsList";
 import {Project} from "./types";
+import {DeletionModal} from "./components/DeletionModal";
 
 const EMPTY_PROJECT: Project = {
   name: '',
@@ -22,6 +23,7 @@ export const Projects = () => {
   const [project, setProject] = useState(EMPTY_PROJECT);
   const [sort, setSort] = useState(1);
   const [displayModal, showModal] = useState(false);
+  const [displayDeletion, showDeletion] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProjects(sort));
@@ -39,9 +41,15 @@ export const Projects = () => {
       await dispatch(createProjects(project));
     }
 
-    dispatch(fetchProjects(sort))
+    dispatch(fetchProjects(sort));
     resetCreationForm();
   }
+
+  const deletionValidation = async (project: Project) => {
+    await dispatch(deleteProject(project));
+    dispatch(fetchProjects(sort));
+    showDeletion(false);
+  };
 
   const sortProjects = () => {
     setSort(sort * -1);
@@ -51,6 +59,11 @@ export const Projects = () => {
   const edit = (project: Project) => {
     setProject(project);
     showModal(true);
+  }
+
+  const drop = (project: Project) => {
+    setProject(project);
+    showDeletion(true);
   }
 
   const nonEmptyProjects = (
@@ -64,7 +77,7 @@ export const Projects = () => {
         <div>
           <Button label={"Sort"} onClick={sortProjects} cancel={true}/>
         </div>
-        <ProjectsList projects={projects} edit={edit}/>
+        <ProjectsList projects={projects} edit={edit} drop={drop}/>
       </div>
     </div>
   );
@@ -95,6 +108,8 @@ export const Projects = () => {
     <div className="px-16 min-h-content">
       {renderContent()}
       <ProjectModal project={project} show={displayModal} onClose={resetCreationForm} onValidation={modalValidation}/>
+      <DeletionModal project={project} show={displayDeletion} onClose={() => showDeletion(false)}
+                     onValidation={deletionValidation}/>
     </div>
   );
 }

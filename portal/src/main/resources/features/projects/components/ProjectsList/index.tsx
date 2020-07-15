@@ -5,11 +5,12 @@ import {initials, randomColor} from "../../../../utils";
 import {DotMenu, DotMenuItem} from "@ui/DotMenu";
 
 type IProjectsList = {
-  projects: Project[],
+  projects: Project[]
   edit: any
+  drop: any
 }
 
-export const ProjectsList = ({projects, edit}: IProjectsList) => {
+export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
   function prepareMembers(members: Member[]) {
     const arr = members.length > 5 ? members.slice(0, 5) : members;
     if (members.length > 5) arr.push({
@@ -41,6 +42,7 @@ export const ProjectsList = ({projects, edit}: IProjectsList) => {
             <div className="flex-1 flex justify-end mr-8">
               <DotMenu>
                 <DotMenuItem label="Edit" onClick={() => edit(project)}/>
+                <DotMenuItem label="Drop" onClick={() => drop(project)}/>
               </DotMenu>
             </div>
           </div>
