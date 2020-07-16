@@ -3,6 +3,7 @@ package com.kyra.account.service;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
 
 import java.util.List;
 
@@ -26,5 +27,5 @@ public interface AccountService {
    */
   void findUser(String email, Handler<AsyncResult<JsonObject>> handler);
 
-  void search(String query, Handler<AsyncResult<List<JsonObject>>> handler);
+  void search(String query, User user, Handler<AsyncResult<List<JsonObject>>> handler);
 }

@@ -2,11 +2,13 @@ package com.kyra.account.service.impl;
 
 import com.kyra.account.service.AccountService;
 import com.kyra.common.bean.Field;
+import com.kyra.common.bean.UserImpl;
 import com.kyra.common.pg.Pg;
 import com.kyra.common.pg.PgResult;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
 import io.vertx.sqlclient.Tuple;
 
 import java.util.List;
@@ -27,9 +29,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public void search(String query, Handler<AsyncResult<List<JsonObject>>> handler) {
+  public void search(String query, User user, Handler<AsyncResult<List<JsonObject>>> handler) {
     String sql = "SELECT email, first_name, last_name FROM account.user " +
-      "WHERE search_field LIKE $1";
-    Pg.getInstance().preparedQuery(sql, Tuple.of("%" + query + "%"), PgResult.jsonResult(handler));
+      "WHERE search_field LIKE $1 AND email <> $2";
+    Pg.getInstance().preparedQuery(sql, Tuple.of("%" + query + "%", ((UserImpl) user).email()), PgResult.jsonResult(handler));
   }
 }

@@ -17,7 +17,7 @@ export const DeletionModal = ({project, show, onClose, onValidation}: IDeletionM
         Deleting a project will permanently remove it and all its associated information.
         &nbsp;<span className="font-bold text-secondary-100">This can not be undone.</span>
       </p>
-      <p className="mt-4">Are sur you want to delete project <span className="font-bold">{project.name}</span>.</p>
+      <p className="mt-4">Are sur you want to delete project <span className="font-bold">{project.name}</span> ?</p>
     </div>
   </Modal>
 );

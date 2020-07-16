@@ -111,6 +111,11 @@ public class ProjectController {
             }
           });
 
+          if (emails.isEmpty()) {
+            Render.ok(rc, new JsonArray(projects));
+            return;
+          }
+
           accountProxy.retrieve(emails, accr -> {
             if (accr.failed()) {
               log.error(String.format("[%s] Failed to retrieve account", accr.cause()));

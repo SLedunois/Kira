@@ -78,7 +78,7 @@ public class AccountController {
 
   private void search(RoutingContext rc) {
     String q = rc.request().getParam("q");
-    accountService.search(q, ar -> {
+    accountService.search(q, rc.user(), ar -> {
       if (ar.failed()) {
         log.error(String.format("[%s] Failed to search for user: %s", AccountController.class, q), ar.cause());
         Render.internalServerError(rc);

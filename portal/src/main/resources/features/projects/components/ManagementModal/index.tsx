@@ -26,11 +26,17 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
     setProjectMembers(project.members);
   }, [project]);
 
+  function resetForm() {
+    setProjectMembers([]);
+    setMembers([]);
+    setMemberName('');
+    setProjectName('');
+  }
+
   const searchForMembers = async (value: string) => {
     try {
       if (value.trim() === '') {
-        setMembers([]);
-        setMemberName('');
+        resetForm();
         return;
       }
 
@@ -52,6 +58,16 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
     }
   }
 
+  const onModalValidation = () => {
+    onValidation({...project, name: projectName, members: projectMembers});
+    resetForm();
+  }
+
+  const onModalClose = () => {
+    onClose();
+    resetForm();
+  }
+
   const removeProjectMember = (member: Member) => {
     setProjectMembers(projectMembers.filter(pm => pm.email !== member.email))
   }
@@ -60,8 +76,8 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
     <Modal title={project.id ? 'Edit project' : 'Add new project'}
            validationLabel={project.id ? 'update' : 'add'}
            active={show}
-           onClose={onClose}
-           onValidation={() => onValidation({...project, name: projectName, members: projectMembers})}>
+           onClose={onModalClose}
+           onValidation={onModalValidation}>
       <div className="mb-6">
         <Input label={"Project name"} value={projectName} onChange={(event) => setProjectName(event.target.value)}/>
       </div>

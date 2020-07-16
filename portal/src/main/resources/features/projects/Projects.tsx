@@ -66,6 +66,11 @@ export const Projects = () => {
     showDeletion(true);
   }
 
+  const onDeletionClose = () => {
+    showDeletion(false);
+    setProject(EMPTY_PROJECT);
+  }
+
   const nonEmptyProjects = (
     <div className="min-h-content">
       <div className="flex py-10 justify-end items-center">
@@ -108,7 +113,7 @@ export const Projects = () => {
     <div className="px-16 min-h-content">
       {renderContent()}
       <ProjectModal project={project} show={displayModal} onClose={resetCreationForm} onValidation={modalValidation}/>
-      <DeletionModal project={project} show={displayDeletion} onClose={() => showDeletion(false)}
+      <DeletionModal project={project} show={displayDeletion} onClose={onDeletionClose}
                      onValidation={deletionValidation}/>
     </div>
   );
