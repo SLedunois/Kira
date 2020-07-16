@@ -65,6 +65,23 @@ project:
   links:
     - postgres
     - redis
+kanban:
+  container_name: kanban
+  image: openjdk:alpine
+  working_dir: /usr/src
+  command: java -jar /usr/src/kanban-fat.jar -conf /usr/src/kanban.json -cluster
+  environment:
+    - "JAVA_TOOL_OPTIONS=\"-agentlib:jdwp=transport=dt_socket,address=8003,server=y,suspend=n\""
+  ports:
+    - "3003:3003"
+    - "8003:8003"
+  volumes:
+    - "./kanban/build/libs/kanban-fat.jar:/usr/src/kanban-fat.jar"
+    - "./conf/kanban.json:/usr/src/kanban.json"
+    - "./conf/default-cluster.xml:/usr/src/cluster.xml"
+  links:
+    - postgres
+    - redis
 postgres:
   container_name: postgres
   image: postgres:9.6
@@ -91,5 +108,6 @@ nginx:
     - account
     - portal
     - project
+    - kanban
   volumes:
     - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro

@@ -82,6 +82,20 @@ subprojects {
     }
   }
 
+  project(":kanban") {
+    apply plugin: 'java'
+
+    dependencies {
+      compile project(':common')
+      compile "io.vertx:vertx-web-api-contract:$vertxVersion"
+      compileOnly "io.vertx:vertx-codegen:$vertxVersion"
+      annotationProcessor "io.vertx:vertx-codegen:$vertxVersion:processor"
+      testCompile "io.vertx:vertx-junit5:$vertxVersion"
+      testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion"
+      testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion"
+    }
+  }
+
   project(":common") {
     apply plugin: 'java'
 
