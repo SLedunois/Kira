@@ -51,6 +51,7 @@ export const Projects = () => {
     await dispatch(deleteProject(project));
     dispatch(fetchProjects(sort));
     showDeletion(false);
+    setProject(EMPTY_PROJECT);
   };
 
   const sortProjects = () => {
