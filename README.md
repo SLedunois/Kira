@@ -7,3 +7,4 @@
 ![Common](https://github.com/SLedunois/Kyra/workflows/Common/badge.svg)
 ![Portal](https://github.com/SLedunois/Kyra/workflows/Portal/badge.svg)
 ![Account](https://github.com/SLedunois/Kyra/workflows/Account/badge.svg)
+![Kanban](https://github.com/SLedunois/Kyra/workflows/Kanban/badge.svg)
