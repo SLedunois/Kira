@@ -1,8 +1,10 @@
-import * as ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import {App} from "./features/app/App";
 
-import * as React from "react";
+import './i18n';
+
+import {App} from "./features/app/App";
 import './assets/tailwind.css';
 
 import store from './store';

@@ -3,6 +3,7 @@ import {createPortal} from "react-dom";
 
 import {Close} from '@ui/icons';
 import {Button} from "@ui/Button";
+import {useTranslation} from "react-i18next";
 
 type IModal = {
   active: boolean
@@ -33,12 +34,15 @@ const ModalHeader = ({title, onClose}: IModalHeader) => (
   </div>
 )
 
-const ModalFooter = ({onClose, onValidation, validationLabel}: IModalFooter) => (
-  <div className="flex justify-between p-4">
-    <Button onClick={onClose} label="Cancel" cancel={true}/>
-    <Button onClick={onValidation} label={validationLabel}/>
-  </div>
-);
+const ModalFooter = ({onClose, onValidation, validationLabel}: IModalFooter) => {
+  const {t} = useTranslation();
+  return (
+    <div className="flex justify-between p-4">
+      <Button onClick={onClose} label={t('cancel')} cancel={true}/>
+      <Button onClick={onValidation} label={validationLabel}/>
+    </div>
+  )
+}
 
 const ModalComponent = ({title, children, active, onClose, onValidation, validationLabel}: IModal) => {
   const onEsc = (evt: KeyboardEvent) => {

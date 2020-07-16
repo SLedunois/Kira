@@ -11,6 +11,7 @@ import {createProjects, deleteProject, fetchProjects, updateProject} from './Pro
 import {ProjectsList} from "./components/ProjectsList";
 import {Project} from "./types";
 import {DeletionModal} from "./components/DeletionModal";
+import {Trans, useTranslation} from "react-i18next";
 
 const EMPTY_PROJECT: Project = {
   name: '',
@@ -18,6 +19,7 @@ const EMPTY_PROJECT: Project = {
 }
 
 export const Projects = () => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const {projects, loading} = useSelector((state: RootState) => state.projectReducer);
   const [project, setProject] = useState(EMPTY_PROJECT);
@@ -74,13 +76,13 @@ export const Projects = () => {
   const nonEmptyProjects = (
     <div className="min-h-content">
       <div className="flex py-10 justify-end items-center">
-        <Button label="Add a project" onClick={() => {
+        <Button label={t('add a project')} onClick={() => {
           showModal(true);
         }}/>
       </div>
       <div>
         <div>
-          <Button label={"Sort"} onClick={sortProjects} cancel={true}/>
+          <Button label={t('sort')} onClick={sortProjects} cancel={true}/>
         </div>
         <ProjectsList projects={projects} edit={edit} drop={drop}/>
       </div>
@@ -90,15 +92,14 @@ export const Projects = () => {
   const emptyProjects = (
     <div className="flex justify-center items-center min-h-content flex-col">
       <img src={EmptyScreen} className="w-1/4"/>
-      <div className="mt-10 font-medium text-4xl">No projects found ?</div>
+      <div className="mt-10 font-medium text-4xl">{t('no projects found')} ?</div>
       <div className="mt-5 text-2xl text-center">
         <button className="text-primary-100" onClick={() => {
           showModal(true);
         }}>
-          Create a new project
+          {t('create a new project')}
         </button>
-        &nbsp;
-        from scratch <br/>and assign tasks
+        &nbsp; <Trans t={t}>from scratch and assign tasks</Trans>
       </div>
     </div>
   );

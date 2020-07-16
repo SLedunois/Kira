@@ -7,6 +7,7 @@ import {Modal} from "../../../../components/Modal";
 import {Member, Project} from "../../types";
 import http from "axios";
 import {randomColor} from "../../../../utils";
+import {useTranslation} from "react-i18next";
 
 type IProjectModal = {
   project: Project
@@ -16,6 +17,7 @@ type IProjectModal = {
 }
 
 export const ProjectModal = ({project, show, onClose, onValidation}: IProjectModal) => {
+  const {t} = useTranslation();
   const [projectName, setProjectName] = useState('');
   const [memberName, setMemberName] = useState('');
   const [members, setMembers] = useState([]);
@@ -73,16 +75,16 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
   }
 
   return (
-    <Modal title={project.id ? 'Edit project' : 'Add new project'}
-           validationLabel={project.id ? 'update' : 'add'}
+    <Modal title={project.id ? t('edit project') : t('add project')}
+           validationLabel={project.id ? t('update') : t('add')}
            active={show}
            onClose={onModalClose}
            onValidation={onModalValidation}>
       <div className="mb-6">
-        <Input label={"Project name"} value={projectName} onChange={(event) => setProjectName(event.target.value)}/>
+        <Input label={t('project name')} value={projectName} onChange={(event) => setProjectName(event.target.value)}/>
       </div>
       <div className="mb-4">
-        <SearchField label={"Invite members"} value={memberName} onChange={searchForMembers}>
+        <SearchField label={t('invite members')} value={memberName} onChange={searchForMembers}>
           {
 
             members.map(member => <SearchListItem key={member.email} lastName={member.last_name}
