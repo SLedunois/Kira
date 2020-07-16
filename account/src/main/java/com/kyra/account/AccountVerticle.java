@@ -5,8 +5,6 @@ import com.kyra.account.service.impl.AccountProxyImpl;
 import com.kyra.common.proxy.AccountProxy;
 import com.kyra.common.verticle.ApiVerticle;
 import io.vertx.core.Promise;
-import io.vertx.servicediscovery.Record;
-import io.vertx.servicediscovery.types.EventBusService;
 import io.vertx.serviceproxy.ServiceBinder;
 
 public class AccountVerticle extends ApiVerticle {
@@ -25,10 +23,5 @@ public class AccountVerticle extends ApiVerticle {
   private void publishServices() {
     AccountProxy accountProxy = new AccountProxyImpl();
     new ServiceBinder(vertx).setAddress(AccountProxy.SERVICE_ADDRESS).register(AccountProxy.class, accountProxy);
-    Record record = EventBusService.createRecord(AccountProxy.SERVICE_NAME, AccountProxy.SERVICE_ADDRESS, AccountProxy.class);
-    publish(record, ar -> {
-      if (ar.failed())
-        log.error(String.format("[%s] Unable to publish service proxy %s", AccountVerticle.class.getName(), AccountProxy.class.getName()), ar.cause());
-    });
   }
 }

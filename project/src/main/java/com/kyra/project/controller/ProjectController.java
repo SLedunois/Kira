@@ -1,6 +1,7 @@
 package com.kyra.project.controller;
 
 import com.kyra.common.bean.UserImpl;
+import com.kyra.common.handler.ProjectHandler;
 import com.kyra.common.proxy.AccountProxy;
 import com.kyra.common.session.AuthCookie;
 import com.kyra.common.session.AuthSessionHandler;
@@ -23,11 +24,13 @@ import java.util.List;
 
 public class ProjectController {
   Logger log = LoggerFactory.getLogger(ProjectController.class);
+  private final Vertx vertx;
   private final AccountProxy accountProxy;
   private final AuthSessionHandler sessionHandler = new AuthSessionHandler();
   private final ProjectService projectService = new ProjectServiceImpl();
 
   public ProjectController(Vertx vertx, OpenAPI3RouterFactory router, SessionStore sessionStore) {
+    this.vertx = vertx;
     sessionHandler.setSessionStore(sessionStore);
     this.accountProxy = AccountProxy.createProxy(vertx);
     router.addSecurityHandler(AuthCookie.NAME, sessionHandler);
@@ -82,7 +85,10 @@ public class ProjectController {
       .add(new JsonObject().put("email", ((UserImpl) rc.user()).email()));
     projectService.create(project, rc.user(), ar -> {
       if (ar.failed()) Render.internalServerError(rc);
-      else Render.created(rc, ar.result());
+      else {
+        ProjectHandler.created(vertx, ar.result());
+        Render.created(rc, ar.result());
+      }
     });
   }
 

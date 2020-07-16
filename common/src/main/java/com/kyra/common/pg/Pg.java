@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Pg {
   private PgPool client;
-  private String schema;
+  private String schema = "public";
 
   private static class PgHolder {
     private static final Pg instance = new Pg();
