@@ -3,7 +3,6 @@ package com.kyra.common.handler;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonObject;
 
 @ProxyGen
@@ -13,15 +12,19 @@ public interface ProjectHandler {
   String HANDLER_ADDRESS = "project.handler";
 
   static void created(Vertx vertx, JsonObject project) {
-    DeliveryOptions opts = new DeliveryOptions();
-    opts.addHeader("action", "onCreation");
-
     JsonObject data = new JsonObject()
       .put("project", project);
 
-    vertx.eventBus().publish(HANDLER_ADDRESS, data, opts);
+    Handler.publish(vertx, HANDLER_ADDRESS, "onCreation", data);
+  }
+
+  static void deleted(Vertx vertx, Integer projectId) {
+    JsonObject data = new JsonObject().put("projectId", projectId);
+    Handler.publish(vertx, HANDLER_ADDRESS, "onDeletion", data);
   }
 
   void onCreation(JsonObject project);
+
+  void onDeletion(Integer projectId);
 
 }

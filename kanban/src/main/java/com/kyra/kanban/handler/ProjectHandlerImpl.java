@@ -6,6 +6,7 @@ import com.kyra.kanban.KanbanVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.sqlclient.Tuple;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,16 @@ public class ProjectHandlerImpl implements ProjectHandler {
     Pg.getInstance().query(query, ar -> {
       if (ar.failed()) {
         log.error(String.format("[%s] Unable to init default project column for project %d", KanbanVerticle.class.getName(), projectId));
+      }
+    });
+  }
+
+  @Override
+  public void onDeletion(Integer projectId) {
+    String query = String.format("DELETE FROM %s.column WHERE project_id = $1", Pg.getInstance().schema());
+    Pg.getInstance().preparedQuery(query, Tuple.of(projectId), ar -> {
+      if (ar.failed()) {
+        log.error(String.format("[%s] Failed to delete columns for project %d", KanbanVerticle.class.getName(), projectId));
       }
     });
   }

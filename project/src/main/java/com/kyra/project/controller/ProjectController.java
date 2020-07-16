@@ -72,7 +72,10 @@ public class ProjectController {
       int id = Integer.parseInt(rc.pathParam("id"));
       projectService.delete(id, ar -> {
         if (ar.failed()) Render.internalServerError(rc);
-        else Render.noContent(rc);
+        else {
+          ProjectHandler.deleted(vertx, id);
+          Render.noContent(rc);
+        }
       });
     } catch (NumberFormatException e) {
       Render.badRequest(rc);
