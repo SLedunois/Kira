@@ -1,8 +1,8 @@
 #/bin/bash
 set -e
 
-microservices=("account" "portal" "project")
-mainVerticles=("com.kyra.account.AccountVerticle" "com.kyra.portal.PortalVerticle", "com.kyra.project.ProjectVerticle")
+microservices=("account" "portal" "project" "kanban")
+mainVerticles=("com.kyra.account.AccountVerticle" "com.kyra.portal.PortalVerticle" "com.kyra.project.ProjectVerticle" "com.kyra.kanban.KanbanVerticle")
 
 build() {
   echo "Building microservice: $1, mainVerticle: $2"

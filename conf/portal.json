@@ -1,12 +1,1 @@
-{
-  "db": {
-    "redis": "redis://redis:6379",
-    "pg": {
-      "host": "postgres",
-      "port": 5432,
-      "db": "kyra",
-      "username": "kyra",
-      "password": "kyra_1234"
-    }
-  }
-}
+{}
