@@ -5,6 +5,7 @@ import {initials, randomColor} from "../../../../utils";
 import {DotMenu, DotMenuItem} from "@ui/DotMenu";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../store";
+import {useTranslation} from "react-i18next";
 
 type IProjectsList = {
   projects: Project[]
@@ -13,6 +14,7 @@ type IProjectsList = {
 }
 
 export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
+  const {t} = useTranslation();
   const {user} = useSelector((state: RootState) => state.appReducer);
 
   function prepareMembers(members: Member[]) {
@@ -46,8 +48,8 @@ export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
             <div className="flex-1 flex justify-end mr-8"> {
               user.email === project.owner ?
                 <DotMenu>
-                  <DotMenuItem label="Edit" onClick={() => edit(project)}/>
-                  <DotMenuItem label="Drop" onClick={() => drop(project)}/>
+                  <DotMenuItem label={t('edit')} onClick={() => edit(project)}/>
+                  <DotMenuItem label={t('drop')} onClick={() => drop(project)}/>
                 </DotMenu>
                 : ''
             }

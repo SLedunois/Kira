@@ -5,6 +5,7 @@ import {Chevron, Logout} from '@ui/icons';
 import {initials} from "../../../utils";
 
 import './profile.css';
+import {useTranslation} from "react-i18next";
 
 interface IProfile {
   firstName: string
@@ -12,6 +13,7 @@ interface IProfile {
 }
 
 export const Profile = (props: IProfile) => {
+  const {t} = useTranslation();
   const firstName = props.firstName || '';
   const lastName = props.lastName || '';
 
@@ -37,7 +39,7 @@ export const Profile = (props: IProfile) => {
             <li className="h-12 flex items-center p-1 pr-3 text-right">
               <a href="/account/sign-out" className="w-full flex justify-end">
                 <Logout className="fill-black mr-2"/>
-                Sign out
+                {t('sign out')}
               </a>
             </li>
           </ul>
