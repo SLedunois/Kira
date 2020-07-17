@@ -9,9 +9,9 @@ public class ProjectVerticle extends ApiVerticle {
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
     super.start(ProjectVerticle.class.getName());
-    OpenAPI3RouterFactory.create(vertx, "openapi/Project.v1.yaml", openr -> {
+    openApiRouter("Project.v1.yaml", openr -> {
       if (openr.failed())
-        log.error(String.format("[%s] Unable to retrieve open api router description", ProjectController.class.getName()), openr.cause());
+        log.error(String.format("[%s] Unable to retrieve open api router description", ProjectVerticle.class.getName()), openr.cause());
       else {
         OpenAPI3RouterFactory router = openr.result();
         new ProjectController(vertx, router, sessionStore);

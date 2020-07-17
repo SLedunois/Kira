@@ -1,3 +1,4 @@
+export * from './Caret';
 export * from './Chevron';
 export * from './Close';
 export * from './Dots';

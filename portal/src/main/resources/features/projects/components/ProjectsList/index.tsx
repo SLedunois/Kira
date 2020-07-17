@@ -1,7 +1,7 @@
 import React from 'react';
-import {Member, Project} from "../../types";
+import {Project} from "../../types";
 import {UserBadge} from "@ui/UserBadge";
-import {initials, randomColor} from "../../../../utils";
+import {initials, prepareMembers, randomColor} from "../../../../utils";
 import {DotMenu, DotMenuItem} from "@ui/DotMenu";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../store";
@@ -16,18 +16,6 @@ type IProjectsList = {
 export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
   const {t} = useTranslation();
   const {user} = useSelector((state: RootState) => state.appReducer);
-
-  function prepareMembers(members: Member[]) {
-    const arr = members.length > 5 ? members.slice(0, 5) : members;
-    if (members.length > 5) arr.push({
-      email: null,
-      first_name: '+',
-      last_name: (members.length - arr.length).toString(),
-      color: 'grey'
-    });
-
-    return arr;
-  }
 
   return (
     <div className="projects-list">

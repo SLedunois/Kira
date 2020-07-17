@@ -1,8 +1,10 @@
 import http from 'axios';
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {Project} from "../projects/types";
 
 type AppState = {
   loading: boolean
+  project: Project
   user: {
     email: string
     first_name: string
@@ -12,6 +14,7 @@ type AppState = {
 
 export const initialState: AppState = {
   loading: false,
+  project: null,
   user: {
     email: null,
     first_name: null,
@@ -27,11 +30,14 @@ export const fetchUser = createAsyncThunk(
   }
 )
 
-
 const appSlice = createSlice({
   name: 'app',
   initialState,
-  reducers: {},
+  reducers: {
+    setProject: (state, action: PayloadAction<Project>) => {
+      state.project = action.payload;
+    }
+  },
   extraReducers: {
     [fetchUser.pending.toString()]: state => {
       state.loading = true
@@ -45,5 +51,7 @@ const appSlice = createSlice({
     }
   }
 });
+
+export const {setProject} = appSlice.actions;
 
 export default appSlice.reducer;

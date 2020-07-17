@@ -121,13 +121,13 @@ public class Pg {
     });
   }
 
-  public String preparedList(List<Object> list) {
+  public String preparedList(List<?> list) {
     StringBuilder builder = new StringBuilder("(");
     for (int i = 0; i < list.size(); i++) {
-      builder.append(String.format("$%d,", i));
+      builder.append(String.format("$%d,", i + 1));
     }
 
-    String array = builder.substring(0, list.size() - 1);
+    String array = builder.substring(0, builder.length() - 1);
     array += ")";
     return array;
   }

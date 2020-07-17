@@ -1,4 +1,4 @@
-CREATE TABLE kanban.column
+CREATE TABLE kanban.activity
 (
     id         bigserial PRIMARY KEY,
     name       character varying,
@@ -8,12 +8,13 @@ CREATE TABLE kanban.column
 
 CREATE TABLE kanban.ticket
 (
-    id        bigserial PRIMARY KEY,
-    name      character varying,
-    content   text,
-    assignee  character varying,
-    column_id bigint,
-    CONSTRAINT fk_column_id FOREIGN KEY (column_id)
-        REFERENCES kanban.column (id) MATCH SIMPLE
+    id          bigserial PRIMARY KEY,
+    name        character varying,
+    content     text,
+    assignee    character varying,
+    index       bigint,
+    activity_id bigint,
+    CONSTRAINT fk_column_id FOREIGN KEY (activity_id)
+        REFERENCES kanban.activity (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE CASCADE
 );

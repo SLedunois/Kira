@@ -52,4 +52,8 @@ public class Render {
   public static void noContent(RoutingContext rc) {
     rc.response().setStatusCode(HttpResponseStatus.NO_CONTENT.code()).end();
   }
+
+  public static void notFound(RoutingContext rc) {
+    rc.response().setStatusCode(HttpResponseStatus.NOT_FOUND.code()).end();
+  }
 }

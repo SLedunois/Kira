@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 
@@ -27,16 +27,13 @@ export const Projects = () => {
   const [displayModal, showModal] = useState(false);
   const [displayDeletion, showDeletion] = useState(false);
 
-  useEffect(() => {
-    dispatch(fetchProjects(sort));
-  }, [dispatch]);
-
   const resetCreationForm = () => {
     showModal(false);
     setProject(EMPTY_PROJECT);
   }
 
   const modalValidation = async (project: Project) => {
+    console.warn(project);
     if (project.id) {
       await dispatch(updateProject(project));
     } else {

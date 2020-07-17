@@ -72,4 +72,14 @@ public class ApiVerticle extends MicroserviceVerticle {
       else handler.handle(Future.succeededFuture());
     });
   }
+
+  /**
+   * Retrieve Open API router based on description file
+   *
+   * @param file    Description file name
+   * @param handler Function handler returning OpenAPI3Router
+   */
+  protected void openApiRouter(String file, Handler<AsyncResult<OpenAPI3RouterFactory>> handler) {
+    OpenAPI3RouterFactory.create(vertx, String.format("openapi/%s", file), handler);
+  }
 }

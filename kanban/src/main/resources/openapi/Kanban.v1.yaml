@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Kanban.v1
+  version: '1.0'
+servers:
+  - url: 'http://app.kyra.io'
+paths:
+  '/api/v1/kanbans/{id}':
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Column'
+              examples: {}
+      operationId: GetKanban
+      parameters: []
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+  '/api/v1/kanbans/{id}/tickets/{ticketId}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: ticketId
+        in: path
+        required: true
+    patch:
+      summary: ''
+      operationId: PatchTicket
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activity_id:
+                  type: number
+                index:
+                  type: number
+components:
+  schemas:
+    Ticket:
+      title: Ticket
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        content:
+          type: string
+        assignee:
+          type: string
+        column_id:
+          type: integer
+    Column:
+      title: Column
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        position:
+          type: integer
+        tickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+  securitySchemes:
+    X-Kyra-Session:
+      name: Kyra authentication cookie
+      type: apiKey
+      in: cookie
+security:
+  - X-Kyra-Session: []
