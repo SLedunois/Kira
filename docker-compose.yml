@@ -11,6 +11,7 @@ front:
   working_dir: /home/node/app
   volumes:
     - "./:/home/node/app"
+    - "~/.npmrc:/home/node/.npmrc"
   command: npm start
   ports:
     - "8080:8080"

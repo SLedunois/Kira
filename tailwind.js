@@ -264,6 +264,12 @@ module.exports = {
     }),
     minHeight: {
       '0': '0',
+      '2': '2rem',
+      '4': '4rem',
+      '6': '6rem',
+      '8': '8rem',
+      '10': '10rem',
+      '12': '12rem',
       content: 'calc(100vh - 4rem);',
       full: '100%',
       screen: '100vh',

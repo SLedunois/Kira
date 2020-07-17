@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {Input} from "../../../../components/Form/Input";
-import {SearchField} from "../../../../components/SearchField";
+import {Input} from "@ui/Form/Input";
+import {SearchField} from "@ui/SearchField";
 import {SearchListItem} from "../SearchListItem";
 import {SearchBadge} from "../SearchBadge";
-import {Modal} from "../../../../components/Modal";
+import {Modal} from "@ui/Modal";
 import {Member, Project} from "../../types";
 import http from "axios";
 import {randomColor} from "../../../../utils";
@@ -18,10 +18,10 @@ type IProjectModal = {
 
 export const ProjectModal = ({project, show, onClose, onValidation}: IProjectModal) => {
   const {t} = useTranslation();
-  const [projectName, setProjectName] = useState('');
+  const [projectName, setProjectName] = useState(project.name);
   const [memberName, setMemberName] = useState('');
   const [members, setMembers] = useState([]);
-  const [projectMembers, setProjectMembers] = useState([]);
+  const [projectMembers, setProjectMembers] = useState(project.members);
 
   useEffect(() => {
     setProjectName(project.name);

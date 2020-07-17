@@ -8,8 +8,8 @@ import com.kyra.account.service.AccountService;
 import com.kyra.account.service.impl.AccountServiceImpl;
 import com.kyra.common.bean.Field;
 import com.kyra.common.bean.UserImpl;
+import com.kyra.common.controller.CommonController;
 import com.kyra.common.session.AuthCookie;
-import com.kyra.common.session.AuthSessionHandler;
 import com.kyra.common.session.RedisSession;
 import com.kyra.common.utils.Render;
 import io.vertx.core.MultiMap;
@@ -17,8 +17,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.http.Cookie;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.web.Router;
@@ -33,17 +31,14 @@ import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 
 import java.util.UUID;
 
-public class AccountController {
-  private Logger log = LoggerFactory.getLogger(AccountController.class);
+public class AccountController extends CommonController {
   private final AccountService accountService = new AccountServiceImpl();
   private final FormLoginHandler formLoginHandler;
   private final Router router;
-  private final AuthSessionHandler sessionHandler;
-  private final SessionStore sessionStore;
   private final TemplateEngine templateEngine;
 
   public AccountController(Vertx vertx, Router router, SessionStore sessionStore) {
-    this.sessionStore = sessionStore;
+    super(sessionStore);
     AuthProvider authProvider = new PgAuthProvider();
     formLoginHandler = new AuthFormLoginHandler()
       .setSessionStore(sessionStore)
@@ -52,7 +47,6 @@ public class AccountController {
       .setPasswordParam("password")
       .setDirectLoggedInOKURL(Route.INDEX.path());
     this.router = router;
-    sessionHandler = new AuthSessionHandler().setSessionStore(sessionStore);
     templateEngine = HandlebarsTemplateEngine.create(vertx);
 
     initRouter();

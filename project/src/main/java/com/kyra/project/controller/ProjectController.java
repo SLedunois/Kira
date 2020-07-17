@@ -1,10 +1,10 @@
 package com.kyra.project.controller;
 
 import com.kyra.common.bean.UserImpl;
+import com.kyra.common.controller.CommonController;
 import com.kyra.common.handler.ProjectHandler;
 import com.kyra.common.proxy.AccountProxy;
 import com.kyra.common.session.AuthCookie;
-import com.kyra.common.session.AuthSessionHandler;
 import com.kyra.common.utils.Render;
 import com.kyra.project.openapi.OperationId;
 import com.kyra.project.service.ProjectService;
@@ -12,8 +12,6 @@ import com.kyra.project.service.impl.ProjectServiceImpl;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.api.contract.openapi3.OpenAPI3RouterFactory;
 import io.vertx.ext.web.sstore.SessionStore;
@@ -22,16 +20,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ProjectController {
-  Logger log = LoggerFactory.getLogger(ProjectController.class);
+public class ProjectController extends CommonController {
   private final Vertx vertx;
   private final AccountProxy accountProxy;
-  private final AuthSessionHandler sessionHandler = new AuthSessionHandler();
   private final ProjectService projectService = new ProjectServiceImpl();
 
   public ProjectController(Vertx vertx, OpenAPI3RouterFactory router, SessionStore sessionStore) {
+    super(sessionStore);
     this.vertx = vertx;
-    sessionHandler.setSessionStore(sessionStore);
     this.accountProxy = AccountProxy.createProxy(vertx);
     router.addSecurityHandler(AuthCookie.NAME, sessionHandler);
     router.addHandlerByOperationId(OperationId.ListProjects.name(), this::listProjects);
