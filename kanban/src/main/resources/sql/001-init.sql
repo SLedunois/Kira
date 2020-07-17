@@ -2,6 +2,7 @@ CREATE TABLE kanban.column
 (
     id         bigserial PRIMARY KEY,
     name       character varying,
+    position   bigint,
     project_id bigint
 );
 
