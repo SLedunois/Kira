@@ -1,5 +1,6 @@
 package com.kyra.kanban.service.impl;
 
+import com.kyra.common.bean.UserImpl;
 import com.kyra.common.pg.Pg;
 import com.kyra.common.pg.PgResult;
 import com.kyra.kanban.service.KanbanService;
@@ -9,6 +10,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.User;
 import io.vertx.sqlclient.Tuple;
 
 import java.util.HashMap;
@@ -44,5 +46,13 @@ public class KanbanServiceImpl implements KanbanService {
         }
       });
     }));
+  }
+
+  @Override
+  public void create(Integer projectId, JsonObject ticket, User user, Handler<AsyncResult<JsonObject>> handler) {
+    UserImpl owner = (UserImpl) user;
+    String query = String.format("INSERT INTO %s.ticket (name, content, assignee, activity_id, owner) VALUES ($1, $2, $3, $4, $5) RETURNING *", Pg.getInstance().schema());
+    Tuple params = Tuple.of(ticket.getString("name"), ticket.getString("content"), ticket.getString("assignee"), ticket.getInteger("activity_id"), owner.email());
+    Pg.getInstance().preparedQuery(query, params, PgResult.uniqueJsonResult(handler));
   }
 }

@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Input} from "@ui/Form/Input";
 import {SearchField} from "@ui/SearchField";
-import {SearchListItem} from "../SearchListItem";
-import {SearchBadge} from "../SearchBadge";
+import {UserListItem} from "../../../../components/UserListItem";
+import {UserSelection} from "@ui/UserBadge";
 import {Modal} from "@ui/Modal";
 import {Member, Project} from "../../types";
-import http from "axios";
-import {randomColor} from "../../../../utils";
+import {searchMembers} from "../../../../utils";
 import {useTranslation} from "react-i18next";
 
 type IProjectModal = {
@@ -42,8 +41,7 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
         return;
       }
 
-      const {data} = await http.get(`/account/search?q=${value}`);
-      (data as Member[]).map(member => member.color = randomColor());
+      const data = await searchMembers(value);
       setMembers(data);
       setMemberName(value);
     } catch (e) {
@@ -75,7 +73,7 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
   }
 
   return (
-    <Modal title={project.id ? t('edit project') : t('add project')}
+    <Modal title={project.id ? t('edit project') : t('add a project')}
            validationLabel={project.id ? t('update') : t('add')}
            active={show}
            onClose={onModalClose}
@@ -87,18 +85,19 @@ export const ProjectModal = ({project, show, onClose, onValidation}: IProjectMod
         <SearchField label={t('invite members')} value={memberName} onChange={searchForMembers}>
           {
 
-            members.map(member => <SearchListItem key={member.email} lastName={member.last_name}
-                                                  firstName={member.first_name}
-                                                  color={member.color}
-                                                  onClick={() => addProjectMember(member)}/>)
+            members.map(member => <UserListItem key={member.email} lastName={member.last_name}
+                                                firstName={member.first_name}
+                                                color={member.color}
+                                                onClick={() => addProjectMember(member)}/>)
           }
         </SearchField>
       </div>
       <div className="flex flex-row flex-wrap">
         {
-          projectMembers.map(member => <SearchBadge key={member.email} lastName={member.last_name}
-                                                    firstName={member.first_name}
-                                                    color={member.color} onRemove={() => removeProjectMember(member)}/>)
+          projectMembers.map(member => <UserSelection key={member.email} lastName={member.last_name}
+                                                      firstName={member.first_name}
+                                                      color={member.color}
+                                                      onRemove={() => removeProjectMember(member)}/>)
         }
       </div>
     </Modal>

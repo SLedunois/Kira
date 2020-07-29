@@ -55,6 +55,33 @@ paths:
                   type: number
                 index:
                   type: number
+  '/api/v1/kanbans/{id}/tickets':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    post:
+      summary: ''
+      operationId: PostTicket
+      responses:
+        '201':
+          description: Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                content:
+                  type: string
+                assignee:
+                  type: string
+                activity_id:
+                  type: number
 components:
   schemas:
     Ticket:
@@ -68,7 +95,15 @@ components:
         content:
           type: string
         assignee:
-          type: string
+          title: User
+          type: object
+          properties:
+            email:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
         column_id:
           type: integer
     Column:

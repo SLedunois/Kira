@@ -19,7 +19,7 @@ public class KanbanVerticle extends ApiVerticle {
         log.error(String.format("[%s] Unable to retrieve open api router description", KanbanVerticle.class.getName()), openr.cause());
       } else {
         OpenAPI3RouterFactory router = openr.result();
-        new KanbanController(router, sessionStore);
+        new KanbanController(vertx, router, sessionStore);
         new TicketController(router, sessionStore);
         launchHttpServer(KanbanVerticle.class.getName(), router, config().getInteger("port", 3003), ar -> {
           log.info(String.format("%s service successfully starts", KanbanVerticle.class.getName()));

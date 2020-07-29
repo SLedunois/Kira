@@ -5,13 +5,14 @@ import {Close} from '@ui/icons';
 import {Button} from "@ui/Button";
 import {useTranslation} from "react-i18next";
 
-type IModal = {
+export type IModal = {
   active: boolean
   title: string
   onClose: any
   onValidation: any
   validationLabel?: any
   children?: any
+  disabled?: boolean
 }
 
 type IModalHeader = {
@@ -23,6 +24,7 @@ type IModalFooter = {
   validationLabel: string
   onValidation: any
   onClose: any
+  disabled?: boolean
 }
 
 const ModalHeader = ({title, onClose}: IModalHeader) => (
@@ -34,17 +36,19 @@ const ModalHeader = ({title, onClose}: IModalHeader) => (
   </div>
 )
 
-const ModalFooter = ({onClose, onValidation, validationLabel}: IModalFooter) => {
+const ModalFooter = ({onClose, onValidation, validationLabel, disabled = false}: IModalFooter) => {
   const {t} = useTranslation();
   return (
     <div className="flex justify-between p-4">
       <Button onClick={onClose} label={t('cancel')} cancel={true}/>
-      <Button onClick={onValidation} label={validationLabel}/>
+      <Button onClick={onValidation} label={validationLabel} disabled={disabled}/>
     </div>
   )
 }
 
-const ModalComponent = ({title, children, active, onClose, onValidation, validationLabel}: IModal) => {
+const ModalComponent = ({title, children, active, onClose, onValidation, validationLabel, disabled = false}: IModal) => {
+  const {t} = useTranslation();
+
   const onEsc = (evt: KeyboardEvent) => {
     let isEscape = (evt.key === "Escape" || evt.key === "Esc");
     if (isEscape) onClose();
@@ -67,9 +71,10 @@ const ModalComponent = ({title, children, active, onClose, onValidation, validat
             {...children}
           </div>
           <ModalFooter
-            validationLabel={validationLabel || "add"}
+            validationLabel={validationLabel || t('add')}
             onValidation={onValidation}
-            onClose={onClose}/>
+            onClose={onClose}
+            disabled={disabled}/>
         </div>
       </div>
     </div>

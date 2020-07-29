@@ -1,9 +1,12 @@
+import {Member} from "../projects/types";
+
 export type ITicket = {
-  id: number
+  id?: number
   name: string
   content: string
-  assignee: string
-  index: number
+  assignee: Member
+  index?: number
+  owner: string
   activity_id: number
 }
 

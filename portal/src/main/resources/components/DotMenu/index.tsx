@@ -1,5 +1,6 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 import {Dots} from '@ui/icons';
+import {ClickOutsideHandler} from "@ui/ClickOutsideHandler";
 
 type IDotMenuItem = {
   label: string
@@ -14,21 +15,6 @@ export const DotMenu = (props: any) => {
   useLayoutEffect(() => {
     if (dropdownRef.current) placeDropDown(dropdownRef);
   })
-
-  useEffect(() => {
-    function handleClickOutside(event: any) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        show(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef])
 
   function placeDropDown(elem: React.MutableRefObject<any>) {
 
@@ -57,10 +43,12 @@ export const DotMenu = (props: any) => {
       </button>
       {
         display &&
-        <div
-          className={`absolute bg-white border border-grey-25 mt-2 rounded-lg shadow-xl min-w-10 overflow-hidden ${classes.join(' ')} z-1`}
-          ref={dropdownRef}>
-          {...props.children}
+        <div ref={dropdownRef}
+             className={`absolute bg-white border border-grey-25 mt-2 rounded-lg shadow-xl min-w-10 overflow-hidden ${classes.join(' ')} z-1`}>
+          <ClickOutsideHandler
+            onClickOutside={() => show(false)}>
+            {...props.children}
+          </ClickOutsideHandler>
         </div>
       }
     </div>

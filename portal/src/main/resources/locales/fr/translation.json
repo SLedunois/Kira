@@ -1,11 +1,15 @@
 {
   "add": "Ajouter",
   "add a project": "Ajouter un projet",
+  "add a ticket": "Ajouter un ticket",
   "are sur you want to delete project": "Êtes-vous sûr de vouloir supprimer le projet",
+  "assignee": "Responsable",
   "cancel": "Annuler",
+  "create": "Créer",
   "create a new project": "Créer un nouveau projet",
   "delete a project": "Supprimer un projet",
   "deleting a project will permanently remove it and all its associated information": "Supprimer un projet va le définitivement le supprimer ainsi que toutes ses informations associées",
+  "description": "Descriptif",
   "drop": "Supprimer",
   "edit": "Editer",
   "edit project": "Modifier un project",
@@ -16,6 +20,7 @@
   "project name": "Nom du projet",
   "sign out": "Se déconnecter",
   "sort": "trier",
+  "summary": "Résumé",
   "this can not be undone": "Cette opération est irréversible",
   "update": "Modifier",
   "yes, delete project": "Oui, supprimer le projet"

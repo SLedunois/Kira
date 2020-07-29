@@ -47,7 +47,7 @@ public class TicketController extends CommonController {
 
     tickerService.moveTicket(ticketId, activityId, index, ar -> {
       if (ar.failed()) {
-        log.error(String.format("[%s] failed to move ticket for ticket %d, activity %d, index %d", KanbanVerticle.class.getName(), ticketId, activityId, index));
+        log.error(String.format("[%s] failed to move ticket for ticket %d, activity %d, index %d", KanbanVerticle.class.getName(), ticketId, activityId, index), ar.cause());
         Render.internalServerError(rc);
       } else {
         Render.ok(rc, ar.result());

@@ -20,3 +20,13 @@ export const moveTicket = createAsyncThunk(
     return {...move, destination: {droppableId: data.activity_id, index: data.index}};
   }
 )
+
+export const createTicket = createAsyncThunk(
+  'kanbans/create_ticket',
+  async (ticket: { kanbanId: number, content: string, name: string, assignee: string, activity_id: number }) => {
+    const {kanbanId} = ticket;
+    delete ticket.kanbanId;
+    const {data} = await http.post(`/api/v1/kanbans/${kanbanId}/tickets`, ticket);
+    return data;
+  }
+)

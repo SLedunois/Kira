@@ -9,9 +9,12 @@ import {useTranslation} from "react-i18next";
 import {Project} from "../../features/projects/types";
 import {Select} from "@ui/Select";
 import {History, Location} from "history";
-import {setProject} from "../../features/app/AppSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {Button} from "@ui/Button";
+
+import {setProject} from "../../features/app/AppSlice";
+import {openTicketModal} from "../../features/kanban/KanbanSlice";
 
 interface IHeader {
   match: match
@@ -31,6 +34,16 @@ const HeaderComponent = ({location}: IHeader) => {
     dispatch(setProject(project));
   }
 
+  const onCreateButtonClick = () => {
+    dispatch(openTicketModal({
+      name: '',
+      content: '',
+      assignee: null,
+      owner: null,
+      activity_id: null
+    }));
+  }
+
   return (
     <div className="bg-white h-16 border-b-2 border-border flex items-center justify-between fixed w-full top-0 left-0">
       <div className="flex flex-row items-center justify-between">
@@ -44,10 +57,13 @@ const HeaderComponent = ({location}: IHeader) => {
             <Select selected={project} options={projects} onChange={onProjectChange}/>
           </div>
         }
+        {
+          location.pathname === '/kanban' && <Button label={t('create')} onClick={onCreateButtonClick}/>
+        }
       </div>
       <div className="h-full flex">
         <Notification/>
-        <Profile firstName={user.first_name} lastName={user.last_name}/>
+        {user && <Profile firstName={user.first_name} lastName={user.last_name} color={user.color}/>}
       </div>
     </div>
   )

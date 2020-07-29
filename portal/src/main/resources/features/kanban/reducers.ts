@@ -4,7 +4,7 @@ import {IActivity, ITicket} from "./types";
 
 export const moveTicketReducer = (state: IKanbanState, action: PayloadAction<{ ticketId: number, source: any, destination: any }>) => {
   const {ticketId, source, destination} = action.payload;
-  const {tickets, activities, activityOrder} = state;
+  const {tickets, activities} = state;
   const ticket: ITicket = tickets[ticketId];
 
   if (!ticket) return;

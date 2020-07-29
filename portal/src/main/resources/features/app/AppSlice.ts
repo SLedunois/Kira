@@ -1,6 +1,7 @@
 import http from 'axios';
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Project} from "../projects/types";
+import {randomColor} from "../../utils";
 
 type AppState = {
   loading: boolean
@@ -8,18 +9,15 @@ type AppState = {
   user: {
     email: string
     first_name: string
-    last_name: string
+    last_name: string,
+    color?: string
   }
 }
 
 export const initialState: AppState = {
   loading: false,
   project: null,
-  user: {
-    email: null,
-    first_name: null,
-    last_name: null
-  }
+  user: null
 }
 
 export const fetchUser = createAsyncThunk(
@@ -45,6 +43,7 @@ const appSlice = createSlice({
     [fetchUser.fulfilled.toString()]: (state, action) => {
       state.loading = false;
       state.user = action.payload;
+      state.user.color = randomColor();
     },
     [fetchUser.rejected.toString()]: state => {
       state.loading = false;

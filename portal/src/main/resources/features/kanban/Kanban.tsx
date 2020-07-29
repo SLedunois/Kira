@@ -1,6 +1,8 @@
 import * as React from "react";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {DragDropContext, DropResult} from 'react-beautiful-dnd';
+
 import {fetchKanban, moveTicket} from "./KanbanSlice";
 import {RootState} from "../../store";
 
@@ -8,11 +10,11 @@ import {Loader} from "@ui/Loader";
 import {Activity} from './components/Activity';
 import {initials, prepareMembers, randomColor} from "../../utils";
 import {UserBadge} from "@ui/UserBadge";
-import {DragDropContext, DropResult} from 'react-beautiful-dnd';
+import {TicketModal} from './components/Modal';
 
 export const Kanban = () => {
   const dispatch = useDispatch();
-  const {loading, activities, activityOrder} = useSelector((state: RootState) => state.kanbanReducer);
+  const {loading, activities, activityOrder, ticket} = useSelector((state: RootState) => state.kanbanReducer);
   const {project} = useSelector((state: RootState) => state.appReducer);
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export const Kanban = () => {
   }, [dispatch, project]);
 
   const onDropHandler = (result: DropResult) => {
-    console.warn(result);
     const {destination, source, draggableId} = result;
 
     if (!destination) {
@@ -58,6 +59,7 @@ export const Kanban = () => {
           }
         </div>
       </DragDropContext>
+      <TicketModal/>
     </div>
   );
 };

@@ -5,4 +5,5 @@ export * from './Dots';
 export * from './Kanban';
 export * from './Logout';
 export * from './Notification';
+export * from './Plus';
 export * from './Project';
