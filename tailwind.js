@@ -281,6 +281,7 @@ module.exports = {
       '10': '10rem',
       '12': '12rem',
       content: 'calc(100vh - 4rem);',
+      kanban: 'calc(100vh - 12rem);',
       full: '100%',
       screen: '100vh',
     },

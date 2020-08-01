@@ -8,8 +8,6 @@ import {RootState} from "../../store";
 
 import {Loader} from "@ui/Loader";
 import {Activity} from './components/Activity';
-import {initials, prepareMembers, randomColor} from "../../utils";
-import {UserBadge} from "@ui/UserBadge";
 import {TicketModal} from './components/Modal';
 
 export const Kanban = () => {
@@ -41,15 +39,6 @@ export const Kanban = () => {
 
   return (
     <div className="p-8">
-      <div className="mb-6 flex flex-row justify-end">
-        {
-          project && prepareMembers(project.members).map(({first_name, last_name, color, email}) => (
-            <div className="ml-1 mr-1" key={email}>
-              <UserBadge label={initials(last_name, first_name)} color={color || randomColor()}/>
-            </div>
-          ))
-        }
-      </div>
       <DragDropContext onDragEnd={onDropHandler}>
         <div className="flex flex-row">
           {

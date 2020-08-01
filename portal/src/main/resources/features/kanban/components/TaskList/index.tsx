@@ -8,7 +8,7 @@ type ITaskList = {
 
 export const TaskList = (props: ITaskList) => (
   <div ref={props.innerRef}
-       className={`min-h-12 p-2 rounded-lg transition duration-300 ease-in-out ${props.isDraggingOver ? 'bg-secondary-50' : ''}`}>
+       className={`min-h-kanban p-2 rounded-lg transition duration-300 ease-in-out ${props.isDraggingOver ? 'bg-secondary-50' : ''}`}>
     {props.children}
   </div>
 );
