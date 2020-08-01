@@ -6,6 +6,7 @@ type IUserBadge = {
   label: string
   color: string
   size?: string
+  border?: boolean
 }
 
 type IUserSelection = {
@@ -15,12 +16,13 @@ type IUserSelection = {
   onRemove: any
 }
 
-export const UserBadge = ({label, color, size = "big"}: IUserBadge) => {
+export const UserBadge = ({label, color, size = "big", border = false}: IUserBadge) => {
   const wh = size === "big" ? 'w-10 h-10' : 'w-8 h-8';
   const fSize = size === "big" ? 'text-xl' : 'text-l font-bold';
+  const borderStyle = border ? 'border-white border-2' : ''
   return (
     <div
-      className={`bg-${color}-25 text-${color}-100 ${wh} ${fSize} flex items-center justify-center rounded-full rounded-tl-lg`}>
+      className={`bg-${color}-100 text-white ${wh} ${fSize} ${borderStyle} flex items-center justify-center rounded-full box-content`}>
       {label}
     </div>
   );

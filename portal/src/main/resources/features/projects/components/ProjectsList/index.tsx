@@ -27,8 +27,8 @@ export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
             <div className="flex flex-row flex-1">
               {
                 prepareMembers(project.members).map(({first_name, last_name, color, email}) => (
-                  <div className="ml-3 mr-2" key={email}>
-                    <UserBadge label={initials(last_name, first_name)} color={color || randomColor()}/>
+                  <div className="-mr-2" key={email}>
+                    <UserBadge label={initials(last_name, first_name)} color={color || randomColor()} border={true}/>
                   </div>
                 ))
               }
