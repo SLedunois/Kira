@@ -29,7 +29,7 @@ export const Profile = (props: IProfile) => {
     <div className="h-full" onClick={_open}>
       <div className="flex items-center cursor-pointer h-full">
         <div className="ml-6 mr-4">
-          <UserBadge label={initials(firstName, lastName)} color={props.color}/>
+          <UserBadge label={initials(firstName, lastName)} color={props.color} size={'small'}/>
         </div>
         <div className="mr-4 font-medium text-base">{firstName} {lastName}</div>
         <Chevron className="mr-6 fill-black w-3"/>

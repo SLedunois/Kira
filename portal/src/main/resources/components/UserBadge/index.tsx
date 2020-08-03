@@ -18,7 +18,7 @@ type IUserSelection = {
 
 export const UserBadge = ({label, color, size = "big", border = false}: IUserBadge) => {
   const wh = size === "big" ? 'w-10 h-10' : 'w-8 h-8';
-  const fSize = size === "big" ? 'text-xl' : 'text-l font-bold';
+  const fSize = size === "big" ? 'text-xl' : 'text-sm';
   const borderStyle = border ? 'border-white border-2' : ''
   return (
     <div
