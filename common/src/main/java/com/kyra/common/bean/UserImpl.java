@@ -10,11 +10,13 @@ public class UserImpl implements User {
   private String email;
   private String firstName;
   private String lastName;
+  private String color;
 
   public UserImpl(JsonObject object) {
     this.email = object.getString(Field.email.name(), "");
     this.firstName = object.getString(Field.first_name.name(), "");
     this.lastName = object.getString(Field.last_name.name(), "");
+    this.color = object.getString("color", "");
   }
 
   @Override
@@ -32,7 +34,8 @@ public class UserImpl implements User {
     return new JsonObject()
       .put(Field.email.name(), this.email)
       .put(Field.first_name.name(), this.firstName)
-      .put(Field.last_name.name(), this.lastName);
+      .put(Field.last_name.name(), this.lastName)
+      .put("color", this.color);
   }
 
   @Override

@@ -1,12 +1,6 @@
 import {Member} from "../features/projects/types";
 import http from "axios";
 
-export function randomColor(): string {
-  const colors = ['primary', 'secondary', 'purple', 'yellow'];
-
-  return colors[Math.floor(Math.random() * colors.length)];
-}
-
 export function initials(firstName: string, lastName: string): string {
   return `${firstName[0]}${lastName[0]}`.toUpperCase();
 }
@@ -34,6 +28,5 @@ export function UUID() {
 
 export async function searchMembers(value: string) {
   const {data} = await http.get(`/account/search?q=${value}`);
-  (data as Member[]).map(member => member.color = randomColor());
   return data;
 }

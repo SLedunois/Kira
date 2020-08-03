@@ -20,7 +20,7 @@ public class AccountProxyImpl implements AccountProxy {
       params.addString(emails.get(i));
     }
     String where = emailList.toString().substring(0, emailList.length() - 1) + ")";
-    String query = String.format("SELECT email, first_name, last_name FROM %s.user WHERE email IN %s ORDER BY last_name", Pg.getInstance().schema(), where);
+    String query = String.format("SELECT email, first_name, last_name, color FROM %s.user WHERE email IN %s ORDER BY last_name", Pg.getInstance().schema(), where);
     Pg.getInstance().preparedQuery(query, params, PgResult.jsonResult(handler));
   }
 }

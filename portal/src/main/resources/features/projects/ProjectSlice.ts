@@ -1,7 +1,6 @@
 import http from 'axios';
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {Project} from './types';
-import {randomColor} from "../../utils";
 
 type ProjectState = {
   loading: boolean
@@ -13,15 +12,10 @@ const initialState: ProjectState = {
   projects: []
 }
 
-function initProject(project: Project) {
-  if (project.members.length > 0) project.members.map(member => member.color = randomColor());
-}
-
 export const fetchProjects = createAsyncThunk(
   'projects/fetch',
   async (sort?: number) => {
     const {data} = await http.get(`/api/v1/projects${sort ? `?sort=${sort}` : ''}`);
-    data.forEach(initProject)
     return data;
   }
 );

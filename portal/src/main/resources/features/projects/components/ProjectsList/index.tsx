@@ -1,7 +1,7 @@
 import React from 'react';
 import {Project} from "../../types";
 import {UserBadge} from "@ui/UserBadge";
-import {initials, prepareMembers, randomColor} from "../../../../utils";
+import {initials, prepareMembers} from "../../../../utils";
 import {DotMenu, DotMenuItem} from "@ui/DotMenu";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../store";
@@ -28,7 +28,7 @@ export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
               {
                 prepareMembers(project.members).map(({first_name, last_name, color, email}) => (
                   <div className="-mr-2" key={email}>
-                    <UserBadge label={initials(last_name, first_name)} color={color || randomColor()} border={true}/>
+                    <UserBadge label={initials(last_name, first_name)} color={color} border={true}/>
                   </div>
                 ))
               }

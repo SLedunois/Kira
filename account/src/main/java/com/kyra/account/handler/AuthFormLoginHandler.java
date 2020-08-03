@@ -65,7 +65,6 @@ public class AuthFormLoginHandler implements FormLoginHandler {
 
   @Override
   public void handle(RoutingContext rc) {
-    //TODO Check if user already have session. If session is valid, doRedirect to index page
     HttpServerRequest req = rc.request();
     if (req.method() != HttpMethod.POST) {
       rc.fail(405); // Must be a POST
