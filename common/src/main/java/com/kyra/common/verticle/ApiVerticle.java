@@ -76,10 +76,13 @@ public class ApiVerticle extends MicroserviceVerticle {
   /**
    * Retrieve Open API router based on description file
    *
-   * @param file    Description file name
-   * @param handler Function handler returning OpenAPI3Router
+   * @param file Description file name
    */
-  protected void openApiRouter(String file, Handler<AsyncResult<OpenAPI3RouterFactory>> handler) {
-    OpenAPI3RouterFactory.create(vertx, String.format("openapi/%s", file), handler);
+  protected Future<OpenAPI3RouterFactory> openApiRouter(String file) {
+    return Future.future(promise -> OpenAPI3RouterFactory.create(vertx, String.format("openapi/%s", file), promise));
+  }
+
+  public void onInitFailure(Throwable cause) {
+    log.error("Unable to start verticle", cause);
   }
 }
