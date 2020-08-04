@@ -21,8 +21,9 @@ export const ProjectsList = ({projects, edit, drop}: IProjectsList) => {
     <div className="projects-list">
       {
         projects.map(project => (
-          <div className="bg-white rounded-md flex justify-between items-center h-20 mb-4 flex flex-row"
-               key={project.id}>
+          <div
+            className="bg-white rounded-md flex justify-between items-center h-20 mb-4 flex flex-row shadow-sm transition ease-in-out duration-200 hover:shadow-lg"
+            key={project.id}>
             <div className="text-2xl ml-8 flex-1">{project.name}</div>
             <div className="flex flex-row flex-1">
               {
