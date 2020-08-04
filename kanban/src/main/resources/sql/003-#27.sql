@@ -4,6 +4,9 @@ DECLARE
     ticketIndex bigint;
 BEGIN
     SELECT MAX(index) + 1 FROM kanban.ticket WHERE activity_id = NEW.activity_id INTO ticketIndex;
+    IF ticketIndex IS NULL then
+        ticketIndex = 0;
+    END IF;
     NEW.index = ticketIndex;
     RETURN NEW;
 END
