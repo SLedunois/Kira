@@ -22,7 +22,7 @@ public class ProjectHandlerImpl implements ProjectHandler {
     String query = String.format("INSERT INTO %s.activity (name, position, project_id) VALUES ", Pg.getInstance().schema());
 
     for (int i = 0; i < DEFAULT_COLUMNS.size(); i++) {
-      query += String.format("('%s', %d, %d),", DEFAULT_COLUMNS.get(i), i + 1, projectId);
+      query += String.format("('%s', %d, %d),", DEFAULT_COLUMNS.get(i), i, projectId);
     }
     query = query.substring(0, query.length() - 1);
     Pg.getInstance().query(query, ar -> {
