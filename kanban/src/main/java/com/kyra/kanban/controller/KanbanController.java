@@ -78,6 +78,11 @@ public class KanbanController extends CommonController {
           List<String> users = new ArrayList<>();
           activities
             .forEach(activity -> ((List<JsonObject>) activity.getJsonArray("tickets").getList()).forEach(ticket -> users.add(ticket.getString("assignee"))));
+          if (users.isEmpty()) {
+            Render.ok(rc, new JsonArray(activities));
+            return;
+          }
+
           accountProxy.retrieve(users, accHandler -> {
             if (accHandler.failed()) {
               Render.internalServerError(rc);
