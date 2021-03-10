@@ -3,9 +3,9 @@ info:
   title: Project
   version: '1.0'
 servers:
-  - url: 'http://app.kyra.io'
+  - url: 'http://app.kyra.io/api/v1'
 paths:
-  /api/v1/projects:
+  /projects:
     get:
       summary: Retrieve
       tags:
@@ -49,7 +49,7 @@ paths:
               $ref: '#/components/schemas/Project'
         description: ''
     parameters: []
-  '/api/v1/projects/{id}':
+  '/projects/{id}':
     parameters:
       - schema:
           type: number
